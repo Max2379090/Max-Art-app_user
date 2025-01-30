@@ -60,9 +60,11 @@ class DateOfBirth extends StatelessWidget {
                             firstDate: DateTime(1900),
                             lastDate: DateTime.now(),
                           );
-                          controller.dateOfBirth.text =
-                              DateFormat('dd-MM-yyyy').format(pickedDate);
-                                                },
+                          if (pickedDate != null) {
+                            controller.dateOfBirth.text =
+                                DateFormat('dd-MM-yyyy').format(pickedDate);
+                          }
+                        },
                       ),
                     ),
                   ),

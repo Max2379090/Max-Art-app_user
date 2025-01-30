@@ -46,7 +46,7 @@ class FirebaseApi {
 
     await _analytics.logEvent(
       name: 'fcm_token_generated',
-      parameters: {'token': fcmToken ??''},
+      parameters: {'token': fcmToken},
     );
 
     await initLocalNotifications();
