@@ -1,0 +1,34 @@
+buildscript {
+    ext.kotlin_version = '1.8.22' // Define it at the top level for global access
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile) {
+        // Suppress specific warnings during compilation
+        options.compilerArgs << '-Xlint:-options' << '-Xlint:deprecation' << '-Xlint:unchecked'
+    }
+}
+
+rootProject.buildDir = '../build'
+
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

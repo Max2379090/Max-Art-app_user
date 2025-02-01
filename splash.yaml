@@ -1,0 +1,14 @@
+# Configuration for flutter_native_splash package
+flutter_native_splash:
+  color: "#FFFFFF" # Fixed to 6 characters for white
+  color_dark: "#272727"
+  image: assets/logos/max-Store-splash-logo copie2.png
+  image_dark: assets/logos/max-Store-splash-logo copie2.png
+
+  android_12:
+    color: "#FFFFFF" # Fixed to 6 characters for white
+    color_dark: "#272727"
+    image: assets/logos/max-Store-splash-logo copie2.png
+    image_dark: assets/logos/max-Store-splash-logo copie2.png
+
+  web: false
