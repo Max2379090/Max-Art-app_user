@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.Max_store"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 33
         versionCode flutterVersionCode
         versionName flutterVersionName
