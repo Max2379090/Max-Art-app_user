@@ -27,7 +27,7 @@ class HomeMenu extends StatelessWidget {
               selectedIndex: controller.selectedMenu.value,
               backgroundColor: Colors.white,
               elevation: 5,
-              indicatorColor: Colors.grey.withOpacity(0.1),
+              indicatorColor: Colors.grey.withValues(alpha: 0.1),
               onDestinationSelected: (index) {
                 // Prevent FAB tab index
                 if (index != 2) controller.selectedMenu.value = index;
