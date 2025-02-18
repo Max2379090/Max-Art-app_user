@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:typed_data';
+import 'package:Max_store/api/firebase_api.dart';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -13,270 +16,411 @@ class Notifications extends StatefulWidget {
   const Notifications({super.key});
 
   @override
-  _NotificationState createState() => _NotificationState();
+  State<Notifications> createState() => _NotificationState();
 }
 
 class _NotificationState extends State<Notifications> {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool _isInitialized = false;
+  FirebaseApi firebaseApi = FirebaseApi();
 
   @override
   void initState() {
     super.initState();
-    initializeNotifications();
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      String title = message.notification?.title ?? 'No Title';
-      String body = message.notification?.body ?? 'No Body';
-      String imageUrl = message.data['image_url'] ?? '';
-      String targetScreen = message.data['target_screen'] ?? '';
-
-      showNotification(title, body, imageUrl);
-      saveNotificationToFirestore(title, body, imageUrl: imageUrl, targetScreen: targetScreen);
-    });
+    _initializeNotifications();
+    _setupFirebaseMessaging();
   }
 
-  Future<void> initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('notification_icon');
+  Future<void> _initializeNotifications() async {
+    try {
+      // Create notification channel group
+      const AndroidNotificationChannelGroup channelGroup = AndroidNotificationChannelGroup(
+        'product_updates_group',
+        'Product Updates',
+        description: 'Notifications related to product updates and offers',
+      );
+      await _notificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannelGroup(channelGroup);
 
-    const InitializationSettings initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid);
+      // Create notification channel
+      const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'product_updates_channel',
+        'Product Updates',
+        description: 'Channel for product updates notifications',
+        importance: Importance.high,
+        playSound: true,
+        enableVibration: true,
+        groupId: 'product_updates_group',
+      );
+      await _notificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        if (response.payload != null) {
-          print('Notification Payload: ${response.payload}');
-        }
-      },
-    );
-  }
+      // Initialize settings
+      const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('notification_icon');
 
-  Future<void> showNotification(String title, String body, String? imageUrl) async {
-    BigPictureStyleInformation? bigPictureStyleInformation;
+      const InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
 
-    if (imageUrl != null && imageUrl.isNotEmpty) {
-      bigPictureStyleInformation = BigPictureStyleInformation(
-        ByteArrayAndroidBitmap.fromBase64String(imageUrl),
-        contentTitle: title,
-        summaryText: body,
+      await _notificationsPlugin.initialize(
+        initializationSettings,
+        onDidReceiveNotificationResponse: _handleNotificationTap,
+      );
+
+      setState(() => _isInitialized = true);
+    } catch (e) {
+      debugPrint('Error initializing notifications: $e');
+      TLoaders.errorSnackBar(
+        title: 'Error'.tr,
+        message: 'Failed to initialize notifications'.tr,
       );
     }
-
-    final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'product_updates_channel',
-      'Product Updates',
-      channelDescription: 'Channel for product updates notifications',
-      importance: Importance.high,
-      priority: Priority.high,
-      styleInformation: bigPictureStyleInformation,
-      enableVibration: true,
-      vibrationPattern: Int64List.fromList([0, 500, 1000, 500]),
-    );
-
-    final NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      title,
-      body,
-      platformDetails,
-      payload: 'Notification payload',
-    );
   }
 
-  Future<void> saveNotificationToFirestore(
-      String title,
-      String body, {
-        String? imageUrl,
-        String? targetScreen,
-      }) async {
+  void _setupFirebaseMessaging() {
+    FirebaseMessaging.onMessage.listen(_handleFirebaseMessage);
+    FirebaseMessaging.onBackgroundMessage(FirebaseApi.handleBackgroundMessage);
+  }
+
+  Future<void> _handleFirebaseMessage(RemoteMessage message) async {
+    if (!_isInitialized) return;
+
     try {
-      Map<String, dynamic> notificationData = {
+      final String title = message.notification?.title ?? 'No Title';
+      final String body = message.notification?.body ?? 'No Body';
+      final String imageUrl = message.data['image_url'] ?? '';
+      final String targetScreen = message.data['target_screen'] ?? '';
+
+      // Save to Firestore first
+      await _saveNotificationToFirestore(
+        title: title,
+        body: body,
+        imageUrl: imageUrl,
+        targetScreen: targetScreen,
+      );
+
+      // Then show the notification
+      if (imageUrl.isNotEmpty) {
+        final String? base64Image = await _downloadAndEncodeImage(imageUrl);
+        await _showNotification(title, body, base64Image);
+      } else {
+        await _showNotification(title, body, null);
+      }
+    } catch (e) {
+      debugPrint('Error handling Firebase message: $e');
+    }
+  }
+
+  Future<void> _handleNotificationTap(NotificationResponse response) async {
+    if (response.payload != null) {
+      final Map<String, dynamic> payload = json.decode(response.payload!);
+      if (payload['targetScreen'] != null && payload['targetScreen'].isNotEmpty) {
+        Get.toNamed(payload['targetScreen']);
+      }
+    }
+  }
+
+  Future<String?> _downloadAndEncodeImage(String imageUrl) async {
+    try {
+      final response = await http.get(Uri.parse(imageUrl));
+      if (response.statusCode == 200) {
+        return base64Encode(response.bodyBytes);
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error downloading image: $e');
+      return null;
+    }
+  }
+
+  Future<void> _showNotification(String title, String body, String? base64Image) async {
+    try {
+      BigPictureStyleInformation? bigPictureStyleInformation;
+      if (base64Image != null) {
+        bigPictureStyleInformation = BigPictureStyleInformation(
+          ByteArrayAndroidBitmap.fromBase64String(base64Image),
+          contentTitle: title,
+          summaryText: body,
+          hideExpandedLargeIcon: true,
+        );
+      }
+
+      final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+        'product_updates_channel',
+        'Product Updates',
+        channelDescription: 'Channel for product updates notifications',
+        importance: Importance.high,
+        priority: Priority.high,
+        styleInformation: bigPictureStyleInformation,
+        enableVibration: true,
+        groupKey: 'product_updates_group',
+        setAsGroupSummary: true,
+        groupAlertBehavior: GroupAlertBehavior.all,
+        vibrationPattern: Int64List.fromList([0, 500, 1000, 500]),
+        sound: const RawResourceAndroidNotificationSound('notification_sound'),
+      );
+
+      final NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
+
+      await _notificationsPlugin.show(
+        DateTime.now().millisecond,
+        title,
+        body,
+        platformDetails,
+        payload: json.encode({
+          'title': title,
+          'body': body,
+          'imageUrl': base64Image,
+        }),
+      );
+    } catch (e) {
+      debugPrint('Error showing notification: $e');
+    }
+  }
+
+  Future<void> _saveNotificationToFirestore({
+    required String title,
+    required String body,
+    String? imageUrl,
+    String? targetScreen,
+  }) async {
+    try {
+      final Map<String, dynamic> notificationData = {
         'title': title,
         'body': body,
         'timestamp': FieldValue.serverTimestamp(),
         'isRead': false,
-        'targetScreen': targetScreen,
+        'targetScreen': targetScreen ?? '',
+        if (imageUrl != null && imageUrl.isNotEmpty) 'imageUrl': imageUrl,
       };
 
-      if (imageUrl != null && imageUrl.isNotEmpty) {
-        notificationData['imageUrl'] = imageUrl;
-      }
-
-      await FirebaseFirestore.instance.collection('Notifications').add(notificationData);
-      showNotification(title, body, imageUrl);
+      await _firestore.collection('Notifications').add(notificationData);
     } catch (e) {
-      print('Error saving notification: $e');
+      debugPrint('Error saving notification: $e');
+      TLoaders.errorSnackBar(
+        title: 'Error'.tr,
+        message: 'Failed to save notification'.tr,
+      );
     }
   }
 
-  Stream<QuerySnapshot> fetchNotifications() {
-    return FirebaseFirestore.instance
-        .collection('Notifications')
-        .orderBy('timestamp', descending: true)
-        .snapshots();
-  }
-
-  Future<void> deleteNotification(String docId) async {
+  Future<void> _deleteNotification(String docId) async {
     try {
-      await FirebaseFirestore.instance.collection('Notifications').doc(docId).delete();
-      TLoaders.successSnackBar(title: 'Notifications'.tr, message: 'Notification deleted successfully'.tr);
+      await _firestore.collection('Notifications').doc(docId).delete();
+      TLoaders.successSnackBar(
+        title: 'Success'.tr,
+        message: 'Notification deleted successfully'.tr,
+      );
     } catch (e) {
-      TLoaders.warningSnackBar(title: 'Notifications'.tr, message: 'Failed to delete notification'.tr);
+      debugPrint('Error deleting notification: $e');
+      TLoaders.errorSnackBar(
+        title: 'Error'.tr,
+        message: 'Failed to delete notification'.tr,
+      );
     }
   }
 
-  String formatTimestamp(Timestamp timestamp) {
-    DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp.seconds * 1000);
-    return "${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute}";
+  Future<void> _markAsRead(String docId) async {
+    try {
+      await _firestore.collection('Notifications').doc(docId).update({'isRead': true});
+    } catch (e) {
+      debugPrint('Error marking notification as read: $e');
+    }
   }
 
-  /// Helper function to safely parse a timestamp from either a string or Timestamp
-  Timestamp? parseTimestamp(dynamic timestamp) {
-    if (timestamp is Timestamp) {
-      return timestamp;
-    } else if (timestamp is String) {
-      try {
-        return Timestamp.fromDate(DateTime.parse(timestamp));
-      } catch (e) {
-        print('Error converting String to Timestamp: $e');
-        return null;
-      }
-    }
-    return null;
+  String _formatTimestamp(Timestamp timestamp) {
+    final DateTime date = timestamp.toDate();
+    return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year} "
+        "${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}";
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = THelperFunctions.isDarkMode(context);
+
     return Scaffold(
       appBar: AppBar(
-    leading: IconButton(
-    icon:  Icon(Icons.arrow_back, color: isDark ?TColors.light : TColors.black,),
-    onPressed: () => Navigator.of(context).pop(),
-    ),
-    title:  Text('Notifications'.tr, style: TextStyle(color: isDark ? TColors.light : TColors.black,),),
-    centerTitle: true,
-    backgroundColor: isDark ? TColors.black : TColors.light,
-    ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: isDark ? TColors.light : TColors.black),
+          onPressed: () => Get.back(),
+        ),
+        title: Text(
+          'Notifications'.tr,
+          style: TextStyle(color: isDark ? TColors.light : TColors.black),
+        ),
+        centerTitle: true,
+        backgroundColor: isDark ? TColors.black : TColors.light,
+      ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: fetchNotifications(),
+        stream: _firestore
+            .collection('Notifications')
+            .orderBy('timestamp', descending: true)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No notifications found'.tr));
+            return Center(
+              child: Text('Error loading notifications'.tr),
+            );
           }
 
-          var notifications = snapshot.data!.docs;
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.notifications_off_outlined,
+                    size: 48,
+                    color: Colors.grey[400],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No notifications yet'.tr,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            );
+          }
 
           return ListView.builder(
-            itemCount: notifications.length,
+            itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              var notification = notifications[index].data() as Map<String, dynamic>;
+              final doc = snapshot.data!.docs[index];
+              final notification = doc.data() as Map<String, dynamic>;
 
-              String title = notification['title'] ?? 'No Title';
-              String body = notification['body'] ?? 'No Body';
-              String docId = notifications[index].id;
-              String imageUrl = notification['imageUrl'] ?? '';
-              String targetScreen = notification['targetScreen'] ?? '';
-              bool isRead = notification['isRead'] ?? false;
-              Timestamp? timestamp = parseTimestamp(notification['timestamp']);
-              String formattedTimestamp = timestamp != null
-                  ? formatTimestamp(timestamp)
+              final String title = notification['title'] ?? 'No Title';
+              final String body = notification['body'] ?? 'No Body';
+              final String imageUrl = notification['imageUrl'] ?? '';
+              final String targetScreen = notification['targetScreen'] ?? '';
+              final bool isRead = notification['isRead'] ?? false;
+              final String formattedTimestamp = notification['timestamp'] != null
+                  ? _formatTimestamp(notification['timestamp'] as Timestamp)
                   : 'Unknown Date';
 
-              return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: ListTile(
-                  leading: Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (targetScreen.isNotEmpty) {
-                            Navigator.pushNamed(context, targetScreen);
-                          }
-                        },
-                        child: imageUrl.isNotEmpty
-                            ? ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            imageUrl,
-                            width: 90,
-                            height:100,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                            : const Icon(Icons.notifications, size: 40),
-                      ),
-                      if (!isRead)
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            width: 12,
-                            height: 12,
-                            decoration: const BoxDecoration(
-                              color: TColors.primary,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
+              return Dismissible(
+                key: Key(doc.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 16),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                onDismissed: (_) => _deleteNotification(doc.id),
+                child: Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: ListTile(
+                    leading: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        _NotificationImage(
+                          imageUrl: imageUrl,
+                          onTap: targetScreen.isNotEmpty
+                              ? () => Get.toNamed(targetScreen)
+                              : null,
                         ),
-                    ],
-                  ),
-                  title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              body,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                        if (!isRead)
+                          const Positioned(
+                            top: 0,
+                            right: 0,
+                            child: _UnreadIndicator(),
                           ),
-                        ],
-                      ),
-                      const SizedBox(width: 50),
-                      Text(
-                        formattedTimestamp,
-                        style: const TextStyle(color: Colors.grey, fontSize: 10),
-                      ),],
-                  ),
-                  onTap: () async {
-                    await FirebaseFirestore.instance
-                        .collection('Notifications')
-                        .doc(docId)
-                        .update({'isRead': true});
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NotificationDetailPage(
+                      ],
+                    ),
+                    title: Text(
+                      title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          body,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          formattedTimestamp,
+                          style: const TextStyle(color: Colors.grey, fontSize: 10),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      _markAsRead(doc.id);
+                      Get.to(
+                            () => NotificationDetailPage(
                           title: title,
                           body: body,
                           imageUrl: imageUrl,
                           timestamp: formattedTimestamp,
                           targetScreen: targetScreen,
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               );
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class _NotificationImage extends StatelessWidget {
+  final String imageUrl;
+  final VoidCallback? onTap;
+
+  const _NotificationImage({
+    required this.imageUrl,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageUrl.isEmpty) {
+      return const Icon(Icons.notifications, size: 40);
+    }
+
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+          imageUrl,
+          width: 90,
+          height: 100,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return const Icon(Icons.notifications, size: 40);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _UnreadIndicator extends StatelessWidget {
+  const _UnreadIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 12,
+      height: 12,
+      decoration: const BoxDecoration(
+        color: TColors.primary,
+        shape: BoxShape.circle,
       ),
     );
   }

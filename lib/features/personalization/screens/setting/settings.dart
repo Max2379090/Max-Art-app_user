@@ -44,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadAppVersion() async {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
-      _appVersion = '${packageInfo.version})';
+      _appVersion = packageInfo.version;
     });
   }
 
@@ -147,7 +147,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Center(
                       child: Text(
                         'Version $_appVersion',
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: TSizes.spaceBtwSections * 2.5),
