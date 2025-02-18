@@ -12,28 +12,31 @@ import 'firebase_options.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
-/// -- Entry point of Flutter App
 Future<void> main() async {
-  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  try {
+    final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
-  /// -- GetX Local Storage
-  await GetStorage.init();
+    await GetStorage.init();
 
-  /// -- Overcome from transparent spaces at the bottom in iOS full Mode
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
-  /// -- Await Splash until other items Load
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    // Initialize Firebase first
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  /// -- Initialize Firebase & Authentication Repository
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then(
-        (FirebaseApp value) => Get.put(AuthenticationRepository()),
-  );
+    // Initialize authentication repository
+    Get.put(AuthenticationRepository());
 
-  FirebaseApi firebaseApi = FirebaseApi();
-  await firebaseApi.initNotifications();
+    // Initialize Firebase API
+    final firebaseApi = FirebaseApi();
+    await firebaseApi.initNotifications();
 
-  /// -- Main App Starts here...
-  runApp(const App());
+    runApp(const App());
+  } catch (e) {
+    print('Error in main: $e');
+    // You might want to show some error UI here
+  }
 }

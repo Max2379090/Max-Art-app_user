@@ -32,7 +32,7 @@ class _NotificationState extends State<Notifications> {
     _setupFirebaseMessaging();
   }
 
- Future<void> _initializeNotifications() async {
+  Future<void> _initializeNotifications() async {
     try {
       // Create notification channel group
       const AndroidNotificationChannelGroup channelGroup = AndroidNotificationChannelGroup(
@@ -58,9 +58,9 @@ class _NotificationState extends State<Notifications> {
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(channel);
 
-      // Initialize settings - CHANGED HERE to use @mipmap/ic_launcher
+      // Initialize settings
       const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+          AndroidInitializationSettings('notification_icon');
 
       const InitializationSettings initializationSettings =
           InitializationSettings(android: initializationSettingsAndroid);
@@ -87,10 +87,7 @@ class _NotificationState extends State<Notifications> {
 
   Future<void> _handleFirebaseMessage(RemoteMessage message) async {
     if (!_isInitialized) return;
-    print('Handling Firebase message...');
-    final Map<String, dynamic> data = message.data;
-    // print notification data
-    print('Notification data: $data');
+
     try {
       final String title = message.notification?.title ?? 'No Title';
       final String body = message.notification?.body ?? 'No Body';
@@ -139,7 +136,7 @@ class _NotificationState extends State<Notifications> {
     }
   }
 
- Future<void> _showNotification(String title, String body, String? base64Image) async {
+  Future<void> _showNotification(String title, String body, String? base64Image) async {
     try {
       BigPictureStyleInformation? bigPictureStyleInformation;
       if (base64Image != null) {
@@ -163,7 +160,6 @@ class _NotificationState extends State<Notifications> {
         setAsGroupSummary: true,
         groupAlertBehavior: GroupAlertBehavior.all,
         vibrationPattern: Int64List.fromList([0, 500, 1000, 500]),
-        icon: '@mipmap/ic_launcher', // CHANGED HERE
         sound: const RawResourceAndroidNotificationSound('notification_sound'),
       );
 
