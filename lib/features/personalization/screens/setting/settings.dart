@@ -114,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Iconsax.notification,
                       title: 'Notifications'.tr,
                       subTitle: 'Set any kind of notification message'.tr,
-                      onTap: () => Get.to(() => const Notifications()),
+                      onTap: () => Get.to(() => Notifications()),
                     ),
                     TSettingsMenuTile(
                       icon: Icons.headset_mic_outlined,
