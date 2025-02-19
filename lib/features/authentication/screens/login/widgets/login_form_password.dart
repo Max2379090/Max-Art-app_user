@@ -12,8 +12,8 @@ import '../../signup/signup.dart';
 import '../../signup/widgets/creat_gmail_OTP.dart';
 import '../../signup/widgets/otp_page_email.dart';
 
-class TLoginForm extends StatelessWidget {
-  const TLoginForm({
+class LoginFormPassword extends StatelessWidget {
+  const LoginFormPassword({
     super.key,
   });
 
@@ -21,22 +21,22 @@ class TLoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
     return Form(
-      key: controller.loginFormKey,
+      key: controller.loginFormKey2,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
         child: Column(
           children: [
             /// Email
-            TextFormField(
-              controller: controller.email,
-              validator: TValidator.validateEmail,
-              decoration:InputDecoration(prefixIcon: const Icon(Iconsax.direct_right), labelText: TTexts.email.tr),
-            ),
+           // TextFormField(
+             // controller: controller.email,
+             // validator: TValidator.validateEmail,
+             // decoration:InputDecoration(prefixIcon: const Icon(Iconsax.direct_right), labelText: TTexts.email.tr),
+           // ),
             const SizedBox(height: TSizes.spaceBtwInputFields),
 
             /// Password
             Obx(
-              () => TextFormField(
+                  () => TextFormField(
                 obscureText: controller.hidePassword.value,
                 controller: controller.password,
                 validator: (value) => TValidator.validateEmptyText('Password', value),
@@ -61,7 +61,7 @@ class TLoginForm extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Obx(() => Checkbox(value: controller.rememberMe.value, onChanged: (value) => controller.rememberMe.value = value!)),
-                   Text(TTexts.rememberMe.tr),
+                    Text(TTexts.rememberMe.tr),
                   ],
                 ),
 
@@ -79,19 +79,19 @@ class TLoginForm extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwItems),
 
             /// Create Account Button
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(onPressed: () => Get.to(() => const SignupScreen()), child: Text(TTexts.createAccount.tr)),
+           // SizedBox(
+            //  width: double.infinity,
+            //  child: OutlinedButton(onPressed: () => Get.to(() => const SignupScreen()), child: Text(TTexts.createAccount.tr)),
 
-            ),
+            //),
 
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () => Get.to(() =>Otp()), // Pass null
-                child: Text(TTexts.createAccount.tr),
-              ),
-            ),
+            //SizedBox(
+             // width: double.infinity,
+             // child: OutlinedButton(
+              //  onPressed: () => Get.to(() =>Otp()), // Pass null
+               // child: Text(TTexts.createAccount.tr),
+             // ),
+           // ),
           ],
         ),
       ),

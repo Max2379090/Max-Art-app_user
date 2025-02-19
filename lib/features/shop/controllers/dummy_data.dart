@@ -98,7 +98,7 @@ class TDummyData {
       )
     ],
     username: '',
-    id: '', usergender: '', dateOfBirth: '',
+    id: '', usergender: '', dateOfBirth: '', city: '',
   );
 
   /// -- Cart

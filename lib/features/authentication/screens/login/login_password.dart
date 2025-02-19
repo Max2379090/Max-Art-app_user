@@ -1,4 +1,5 @@
 import 'package:Max_store/features/authentication/screens/login/widgets/login_form_email_number.dart';
+import 'package:Max_store/features/authentication/screens/login/widgets/login_form_password.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,8 +11,8 @@ import '../../../../utils/constants/text_strings.dart';
 import 'widgets/login_form.dart';
 import 'widgets/login_header.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginPasswordScreen extends StatelessWidget {
+  const LoginPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,9 @@ class LoginScreen extends StatelessWidget {
               const TLoginHeader(),
 
               /// Form
+              LoginFormPassword (),
               //const TLoginForm(),
-              LoginFormEmailNumber(),
+              //LoginFormEmailNumber(),
 
               /// Divider
               //TFormDivider(dividerText: TTexts.orSignInWith.tr),

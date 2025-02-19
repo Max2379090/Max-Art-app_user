@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../utils/constants/colors.dart';
+import '../singup_number.dart';
 
-class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+class OtpScreen2 extends StatefulWidget {
+  const OtpScreen2({super.key});
 
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _OtpScreenState extends State<OtpScreen2> {
   TextEditingController textEditingController = TextEditingController();
   String currentText = "";
 
@@ -45,7 +47,7 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               const SizedBox(height: 20),
               const Text(
-                'Enter the 4-digit OTP sent to your phone',
+                'Enter the 4-digit OTP sent to your phone number',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
@@ -77,6 +79,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    Get.to(() => SignupNumberScreen());
                     if (currentText.length == 4) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('OTP Verified Successfully!')),

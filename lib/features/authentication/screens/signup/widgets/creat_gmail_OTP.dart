@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import '../../../../../utils/constants/colors.dart';
-import 'otp_page.dart';
+import 'otp_page_email.dart';
+import 'otp_page_number.dart';
 
 
 class Otp extends StatelessWidget {
-  final RxBool isEmailSelected = true.obs;
+  final RxBool isEmailSelected = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -51,21 +52,50 @@ class Otp extends StatelessWidget {
               Obx(() => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ChoiceChip(
-                    label: const Text('Email'),
-                    selected: isEmailSelected.value,
-                    onSelected: (selected) {
-                      isEmailSelected.value = true;
-                    },
-                  ),
                   const SizedBox(width: 10),
                   ChoiceChip(
-                    label: const Text('Phone Number'),
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.phone, color: Colors.white), // Phone icon
+                        const SizedBox(width: 5), // Space between icon and text
+                        const Text(
+                          'Phone Number',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
                     selected: !isEmailSelected.value,
                     onSelected: (selected) {
                       isEmailSelected.value = false;
                     },
+                    selectedColor: TColors.primary,
+                    backgroundColor: Colors.grey,
                   ),
+
+                  SizedBox(width: 20),
+                  ChoiceChip(
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.email, color: Colors.white), // Email icon
+                        const SizedBox(width: 5), // Space between icon and text
+                        const Text(
+                          'Email',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    selected: isEmailSelected.value,
+                    onSelected: (selected) {
+                      isEmailSelected.value = true;
+                    },
+                    selectedColor: TColors.primary,
+                    backgroundColor: Colors.grey,
+                  ),
+
+
+
                 ],
               )),
               const SizedBox(height: 20),
@@ -92,7 +122,7 @@ class Otp extends StatelessWidget {
                   decoration: InputDecoration(
 
                     suffixIcon: IconButton(
-                        onPressed: () => Get.to(() =>  OtpScreen()),
+                        onPressed: () => Get.to(() =>  OtpScreen2()),
                       icon: const Icon(Icons.send_rounded, color: TColors.primary),
                     ),
                     labelText: 'Phone Number'.tr,

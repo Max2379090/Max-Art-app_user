@@ -24,6 +24,12 @@ class TLoginHeader extends StatelessWidget {
         Text(TTexts.loginTitle.tr, style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: TSizes.sm),
         Text(TTexts.loginSubTitle.tr, style: Theme.of(context).textTheme.bodyMedium),
+        const SizedBox(height: 20),
+        const Text(
+          'Log in with your email address or phone number',
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+        ),
       ],
     );
   }
