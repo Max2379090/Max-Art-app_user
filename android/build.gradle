@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.8.22' // Define it at the top level for global access
+    ext.kotlin_version = '1.9.22' // Define it at the top level for global access
     repositories {
         google()
         mavenCentral()
