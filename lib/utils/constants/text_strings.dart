@@ -53,6 +53,7 @@ class TTexts {
   // -- Authentication Headings
   static  String loginTitle = "Welcome back,".tr;
   static  String loginSubTitle = "Discover Limitless Choices and Unmatched Convenience.".tr;
+  static  String loginSubTitle2 = "Enter your password to access your account".tr;
   static  String signupTitle = "Personal information".tr;
   static  String forgetPasswordTitle = "Forget password".tr;
   static  String forgetPasswordSubTitle = "Don’t worry sometimes people can forget too, enter your email and we will send you a password reset link.".tr;

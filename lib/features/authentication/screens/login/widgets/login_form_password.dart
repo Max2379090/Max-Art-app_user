@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../../home_menu.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/validators/validation.dart';
+import '../../../../shop/screens/home/home.dart';
 import '../../../controllers/login_in_controller.dart';
 import '../../password_configuration/forget_password.dart';
 import '../../signup/signup.dart';
@@ -32,7 +34,7 @@ class LoginFormPassword extends StatelessWidget {
              // validator: TValidator.validateEmail,
              // decoration:InputDecoration(prefixIcon: const Icon(Iconsax.direct_right), labelText: TTexts.email.tr),
            // ),
-            const SizedBox(height: TSizes.spaceBtwInputFields),
+
 
             /// Password
             Obx(
@@ -74,7 +76,10 @@ class LoginFormPassword extends StatelessWidget {
             /// Sign In Button
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(), child: Text(TTexts.signIn.tr)),
+              child: ElevatedButton(onPressed: () =>
+                  Get.to(() => HomeMenu()),
+                  //controller.emailAndPasswordSignIn(),
+                  child: Text(TTexts.signIn.tr)),
             ),
             const SizedBox(height: TSizes.spaceBtwItems),
 

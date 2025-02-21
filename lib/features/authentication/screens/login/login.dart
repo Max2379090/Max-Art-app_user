@@ -17,9 +17,13 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
         child: Padding(
           padding: TSpacingStyle.paddingWithAppBarHeight,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ///  Header
               const TLoginHeader(),
@@ -34,10 +38,11 @@ class LoginScreen extends StatelessWidget {
 
               /// Footer
               //const TSocialButtons(),
+              const SizedBox(height: 190),
             ],
           ),
         ),
       ),
-    );
+      ));
   }
 }

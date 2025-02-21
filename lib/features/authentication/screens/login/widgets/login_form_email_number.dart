@@ -149,23 +149,23 @@ class LoginFormEmailNumber extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwInputFields ),
 
             /// Remember Me & Forget Password
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+            //Row(
+             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+             // children: [
                 /// Remember Me
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Obx(() => Checkbox(value: controller.rememberMe.value, onChanged: (value) => controller.rememberMe.value = value!)),
-                    Text(TTexts.rememberMe.tr),
-                  ],
-                ),
+               // Row(
+                //  mainAxisSize: MainAxisSize.min,
+                 // children: [
+                  //  Obx(() => Checkbox(value: controller.rememberMe.value, onChanged: (value) => controller.rememberMe.value = value!)),
+                  //  Text(TTexts.rememberMe.tr),
+                 // ],
+                //),
 
                 /// Forget Password
-                TextButton(onPressed: () => Get.to(() => const ForgetPasswordScreen()), child:  Text(TTexts.forgetPassword.tr)),
-              ],
-            ),
-            const SizedBox(height: TSizes.spaceBtwSections),
+                //TextButton(onPressed: () => Get.to(() => const ForgetPasswordScreen()), child:  Text(TTexts.forgetPassword.tr)),
+             // ],
+            //),
+           // const SizedBox(height: TSizes.spaceBtwSections),
 
             /// Sign In Button
            //SizedBox(
@@ -173,7 +173,7 @@ class LoginFormEmailNumber extends StatelessWidget {
              // child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(), child: Text(TTexts.signIn.tr)),
            // ),
            // const SizedBox(height: TSizes.spaceBtwItems),
-
+            const SizedBox(height: 20),
             /// Create Account Button
             //SizedBox(
             //  width: double.infinity,
