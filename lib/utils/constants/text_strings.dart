@@ -39,6 +39,7 @@ class TTexts {
   static  String rememberMe = "Remember Me".tr;
   static  String forgetPassword = "Forget Password?".tr;
   static  String signIn = "Sign In".tr;
+  static  String fingerprint = "Login with fingerprint".tr;
   static  String createAccount = "Create Account".tr;
   static  String orSignInWith = "or sign in with".tr;
   static  String orSignUpWith = "or sign up with".tr;

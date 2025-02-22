@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../../home_menu.dart';
+import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/validators/validation.dart';
@@ -81,7 +82,38 @@ class LoginFormPassword extends StatelessWidget {
                   //controller.emailAndPasswordSignIn(),
                   child: Text(TTexts.signIn.tr)),
             ),
-            const SizedBox(height: TSizes.spaceBtwItems),
+            const SizedBox(height: TSizes.spaceBtwSections),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => print('object')),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.transparent), // Transparent background
+                  elevation: MaterialStateProperty.all(0), // No shadow
+                  shadowColor: MaterialStateProperty.all(Colors.transparent), // No shadow color
+                  side: MaterialStateProperty.all(BorderSide(color: Colors.transparent, width: 2)), // Border outline
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // Rounded corners
+                  )),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.fingerprint, color: TColors.primary),
+                    SizedBox(width: 8),
+                    Text(
+                      TTexts.fingerprint.tr,
+                      style: TextStyle(color: TColors.primary),
+                    ),
+                  ],
+                ),
+              ),
+            )
+
+
+
+
 
             /// Create Account Button
            // SizedBox(
