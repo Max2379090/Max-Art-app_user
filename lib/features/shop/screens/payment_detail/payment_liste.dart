@@ -27,6 +27,7 @@ class PaymentListScreen extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('PaymentUser')
+            // .where(field: 'user_id', isEqualTo: getCurrentUser().uid)
             .orderBy('created_at', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
