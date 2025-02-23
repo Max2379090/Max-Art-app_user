@@ -39,6 +39,7 @@ class TTexts {
   static  String rememberMe = "Remember Me".tr;
   static  String forgetPassword = "Forget Password?".tr;
   static  String signIn = "Sign In".tr;
+  static  String fingerprint = "Login with fingerprint".tr;
   static  String createAccount = "Create Account".tr;
   static  String orSignInWith = "or sign in with".tr;
   static  String orSignUpWith = "or sign up with".tr;
@@ -53,7 +54,8 @@ class TTexts {
   // -- Authentication Headings
   static  String loginTitle = "Welcome back,".tr;
   static  String loginSubTitle = "Discover Limitless Choices and Unmatched Convenience.".tr;
-  static  String signupTitle = "Let’s create your account".tr;
+  static  String loginSubTitle2 = "Enter your password to access your account".tr;
+  static  String signupTitle = "Personal information".tr;
   static  String forgetPasswordTitle = "Forget password".tr;
   static  String forgetPasswordSubTitle = "Don’t worry sometimes people can forget too, enter your email and we will send you a password reset link.".tr;
   static  String changeYourPasswordTitle = "Password Reset Email Sent".tr;

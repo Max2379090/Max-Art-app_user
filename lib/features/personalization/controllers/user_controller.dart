@@ -73,7 +73,7 @@ class UserController extends GetxController {
             profilePicture: userCredentials.user!.photoURL ?? '',
             usergender: '',
             createdAt: DateTime.now(),
-            dateOfBirth: '',
+            dateOfBirth: '', city: '',
           );
 
           // Save user data

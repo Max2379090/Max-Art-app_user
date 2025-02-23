@@ -17,7 +17,6 @@ class UserRepository extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final _firebaseStorage = FirebaseStorage.instance;
 
-
   /// Function to save user data to Firestore.
   Future<void> saveUserRecord(UserModel user) async {
     try {
@@ -68,7 +67,7 @@ class UserRepository extends GetxController {
     }
   }
 
-  /// Update any field in specific Users Collection
+  /// Update any field in specific Users Collection (e.g., city)
   Future<void> updateSingleField(Map<String, dynamic> json) async {
     try {
       await _db.collection("Users").doc(AuthenticationRepository.instance.getUserID).update(json);

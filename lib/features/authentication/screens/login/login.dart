@@ -1,3 +1,4 @@
+import 'package:Max_store/features/authentication/screens/login/widgets/login_form_email_number.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,26 +17,32 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
         child: Padding(
           padding: TSpacingStyle.paddingWithAppBarHeight,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ///  Header
               const TLoginHeader(),
 
               /// Form
-              const TLoginForm(),
+              //const TLoginForm(),
+              LoginFormEmailNumber(),
 
               /// Divider
-              TFormDivider(dividerText: TTexts.orSignInWith.tr),
-              const SizedBox(height: TSizes.spaceBtwSections),
+              //TFormDivider(dividerText: TTexts.orSignInWith.tr),
+              //const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Footer
-              const TSocialButtons(),
+              //const TSocialButtons(),
+              const SizedBox(height: 190),
             ],
           ),
         ),
       ),
-    );
+      ));
   }
 }

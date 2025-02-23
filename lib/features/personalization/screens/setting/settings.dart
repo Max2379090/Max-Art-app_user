@@ -3,7 +3,7 @@ import '../../../../common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-// Import for launching URLs
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -25,8 +25,28 @@ import '../profile/profile.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  String _appVersion = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _appVersion = packageInfo.version;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,38 +54,30 @@ class SettingsScreen extends StatelessWidget {
 
     return PopScope(
       canPop: false,
-      // Intercept the back button press and redirect to Home Screen
       onPopInvoked: (value) async => Get.offAll(const HomeMenu()),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
             children: [
-              /// -- Header
               TPrimaryHeaderContainer(
                 child: Column(
                   children: [
-                    /// AppBar
                     TAppBar(
                       title: Text(
                         'Account'.tr,
                         style: Theme.of(context).textTheme.headlineMedium!.apply(color: TColors.white),
                       ),
                     ),
-
-                    /// User Profile Card
                     TUserProfileTile(onPressed: () => Get.to(() => const ProfileScreen())),
                     const SizedBox(height: TSizes.spaceBtwSections),
                   ],
                 ),
               ),
-
-              /// -- Profile Body
               Padding(
                 padding: const EdgeInsets.all(TSizes.defaultSpace),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// -- Account  Settings
                     TSectionHeading(title: 'Account Settings'.tr, showActionButton: false),
                     const SizedBox(height: TSizes.spaceBtwItems),
                     TSettingsMenuTile(
@@ -86,12 +98,6 @@ class SettingsScreen extends StatelessWidget {
                       subTitle: 'In-progress and Completed Orders'.tr,
                       onTap: () => Get.to(() => const OrderScreen()),
                     ),
-                    // TSettingsMenuTile(
-                    //   icon: Iconsax.bank,
-                    //   title: 'Bank Account'.tr,
-                    //  subTitle: 'Withdraw balance to registered bank account'.tr,
-                    //   onTap: () => Get.to(() => const Wallet()),
-                    // ),
                     TSettingsMenuTile(
                       icon: Iconsax.wallet,
                       title: 'My History payment'.tr,
@@ -108,23 +114,14 @@ class SettingsScreen extends StatelessWidget {
                       icon: Iconsax.notification,
                       title: 'Notifications'.tr,
                       subTitle: 'Set any kind of notification message'.tr,
-                      onTap: () => Get.to(() => const Notifications()),
+                      onTap: () => Get.to(() => Notifications()),
                     ),
-                    //TSettingsMenuTile(
-                    //  icon: Iconsax.security_card,
-                     // title: 'Account Privacy'.tr,
-                    //  subTitle: 'Manage data usage and connected accounts'.tr,
-                     // onTap: () => Get.to(() => const AccountPrivacyPage()),
-                   // ),
-
                     TSettingsMenuTile(
                       icon: Icons.headset_mic_outlined,
                       title: 'Contact Us'.tr,
-                      subTitle: 'contact our customer service if you have any problems'.tr,
+                      subTitle: 'Contact our customer service if you have any problems'.tr,
                       onTap: () => Get.to(() => const SupportScreen()),
                     ),
-
-                    /// -- App Settings
                     const SizedBox(height: TSizes.spaceBtwSections),
                     TSectionHeading(title: 'App Settings'.tr, showActionButton: false),
                     const SizedBox(height: TSizes.spaceBtwItems),
@@ -132,53 +129,25 @@ class SettingsScreen extends StatelessWidget {
                       icon: Iconsax.translate,
                       title: 'Change Language'.tr,
                       subTitle: 'Select your preferred language'.tr,
-                      onTap: () {
-                        // Call the method to show language dialog instead of navigating
-                        _buildLanguageDialog(context);
-                      },
+                      onTap: () => _buildLanguageDialog(context),
                     ),
-                    // const SizedBox(height: TSizes.spaceBtwItems),
-                    // TSettingsMenuTile(
-                     //icon: Iconsax.document_upload,
-                    // title: 'Load Data',
-                    // subTitle: 'Upload Data to your Cloud Firebase',
-                     // onTap: () => Get.to(() => const UploadDataScreen()),
-                   // ),
-                    const SizedBox(height: TSizes.spaceBtwItems),
-
-                    //const SizedBox(height: TSizes.spaceBtwItems),
-                    // TSettingsMenuTile(
-                    //  icon: Iconsax.translate,
-                    //  title: 'Change Language',
-                    // subTitle: 'Select your preferred language',
-                    // onTap: () => Get.to(() =>  LocationPage()),
-                    // ),
-                    // TSettingsMenuTile(
-                    //  icon: Iconsax.location,
-                    //  title: 'Geolocation',
-                    // subTitle: 'Set recommendation based on location',
-                    // trailing: Switch(value: true, onChanged: (value) {}),
-                    // ),
-                    //TSettingsMenuTile(
-                    //icon: Iconsax.security_user,
-                    // title: 'Safe Mode',
-                    //subTitle: 'Search result is safe for all ages',
-                    //trailing: Switch(value: false, onChanged: (value) {}),
-                    // ),
-                    //TSettingsMenuTile(
-                    // icon: Iconsax.image,
-                    //  title: 'HD Image Quality',
-                    //  subTitle: 'Set image quality to be seen',
-                    // trailing: Switch(value: false, onChanged: (value) {}),
-                    //),
-
-                    /// -- Logout Button
                     const SizedBox(height: TSizes.spaceBtwSections),
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
                         onPressed: () => controller.logout(),
-                        child:  Text('Logout'.tr),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: Colors.red), // Red border
+                          foregroundColor: Colors.red, // Red text color
+                        ),
+                        child: Text('Logout'.tr),
+                      ),
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwSections),
+                    Center(
+                      child: Text(
+                        'Version $_appVersion',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: TSizes.spaceBtwSections * 2.5),
@@ -188,72 +157,33 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ),
-
       ),
-
     );
   }
 
-  // Method to build the language selection dialog
   void _buildLanguageDialog(BuildContext context) {
-
     final List<Map<String, dynamic>> locales = [
-      {'name': 'English', 'locale': const Locale('en', 'US'), 'flag': 'assets/flags/us.png'},
-      {'name': 'Français', 'locale': const Locale('fr', 'FR'), 'flag': 'assets/flags/fr.png'},
+      {'name': 'English', 'locale': const Locale('en', 'US')},
+      {'name': 'Français', 'locale': const Locale('fr', 'FR')},
     ];
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       builder: (builder) {
-        final isDark = THelperFunctions.isDarkMode(context);
         return FractionallySizedBox(
           heightFactor: 0.5,
           child: Container(
-            decoration: BoxDecoration(
-              color: isDark ? TColors.darkerGrey : TColors.light,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            ),
             padding: const EdgeInsets.all(TSizes.lg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TSectionHeading(title: 'Choose Your Language'.tr, showActionButton: false),
-                Expanded(
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              // Add flag image
-                              Image.asset(
-                                locales[index]['flag'],
-                                width: 30, // Adjust width as necessary
-                                height: 20, // Adjust height as necessary
-                              ),
-                              const SizedBox(width: 8), // Space between flag and text
-                              Text(
-                                locales[index]['name'],
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          Get.updateLocale(locales[index]['locale']);
-                          Get.back();
-                        },
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const Divider(color: Colors.grey);
-                    },
-                    itemCount: locales.length,
-                  ),
-                ),
-              ],
+              children: locales.map((locale) => ListTile(
+                title: Text(locale['name']),
+                onTap: () {
+                  Get.updateLocale(locale['locale']);
+                  Get.back();
+                },
+              )).toList(),
             ),
           ),
         );

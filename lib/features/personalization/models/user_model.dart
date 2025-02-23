@@ -7,7 +7,6 @@ import 'address_model.dart';
 
 /// Model class representing user data.
 class UserModel {
-  // Keep those values final which you do not want to update
   final String id;
   String firstName;
   String lastName;
@@ -17,6 +16,7 @@ class UserModel {
   String usergender;
   String dateOfBirth;
   String profilePicture;
+  String city; // Added City field
   final CartModel? cart;
   final List<AddressModel>? addresses;
   AppRole role;
@@ -34,6 +34,7 @@ class UserModel {
     required this.usergender,
     required this.profilePicture,
     required this.dateOfBirth,
+    required this.city, // Added city to constructor
     this.cart,
     this.addresses,
     this.role = AppRole.user,
@@ -44,27 +45,34 @@ class UserModel {
   /// Helper function to get the full name.
   String get fullName => '$firstName $lastName';
 
-
-
   /// Helper function to format phone number.
   String get formattedPhoneNo => TFormatter.formatPhoneNumber(phoneNumber);
 
   /// Static function to split full name into first and last name.
-  static List<String> nameParts(fullName) => fullName.split(" ");
+  static List<String> nameParts(String fullName) => fullName.split(" ");
 
   /// Static function to generate a username from the full name.
-  static String generateUsername(fullName) {
+  static String generateUsername(String fullName) {
     List<String> nameParts = fullName.split(" ");
     String firstName = nameParts[0].toLowerCase();
     String lastName = nameParts.length > 1 ? nameParts[1].toLowerCase() : "";
 
-    String camelCaseUsername = "$firstName$lastName"; // Combine first and last name
-    String usernameWithPrefix = "Max_$camelCaseUsername"; // Add "cwt_" prefix
-    return usernameWithPrefix;
+    return "Max_${firstName}${lastName}"; // Add "Max_" prefix
   }
 
   /// Static function to create an empty user model.
-  static UserModel empty() => UserModel(id: '', firstName: '', lastName: '', username: '', email: '', phoneNumber: '', profilePicture: '', usergender: '', dateOfBirth: '');
+  static UserModel empty() => UserModel(
+    id: '',
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    phoneNumber: '',
+    profilePicture: '',
+    usergender: '',
+    dateOfBirth: '',
+    city: '', // Added empty city field
+  );
 
   /// Convert model to JSON structure for storing data in Firebase.
   Map<String, dynamic> toJson() {
@@ -73,13 +81,14 @@ class UserModel {
       'LastName': lastName,
       'Username': username,
       'Email': email,
-      'UserGender':usergender,
+      'UserGender': usergender, // Fixed field name
       'PhoneNumber': phoneNumber,
       'DateOfBirth': dateOfBirth,
       'ProfilePicture': profilePicture,
-      'Role': AppRole.user.name,
-      'CreatedAt': createdAt = DateTime.now(),
-      'UpdatedAt': DateTime.now(),
+      'City': city, // Added city to Firebase
+      'Role': role.name, // Ensure role is stored as a string
+      'CreatedAt': createdAt != null ? Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
+      'UpdatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : FieldValue.serverTimestamp(),
     };
   }
 
@@ -94,9 +103,12 @@ class UserModel {
         username: data['Username'] ?? '',
         email: data['Email'] ?? '',
         phoneNumber: data['PhoneNumber'] ?? '',
-        usergender: data['Gender'] ?? '',
+        usergender: data['UserGender'] ?? '', // Fixed to match `toJson`
         profilePicture: data['ProfilePicture'] ?? '',
-        dateOfBirth:data['DateOfBirth']?? '',
+        dateOfBirth: data['DateOfBirth'] ?? '',
+        city: data['City'] ?? '', // Fetch city from Firebase
+        createdAt: (data['CreatedAt'] as Timestamp?)?.toDate(),
+        updatedAt: (data['UpdatedAt'] as Timestamp?)?.toDate(),
       );
     } else {
       return UserModel.empty();

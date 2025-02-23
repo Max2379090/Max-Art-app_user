@@ -1,3 +1,4 @@
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -8,6 +9,8 @@ import '../../../../../utils/validators/validation.dart';
 import '../../../controllers/login_in_controller.dart';
 import '../../password_configuration/forget_password.dart';
 import '../../signup/signup.dart';
+import '../../signup/widgets/creat_gmail_OTP.dart';
+import '../../signup/widgets/otp_page_email.dart';
 
 class TLoginForm extends StatelessWidget {
   const TLoginForm({
@@ -79,6 +82,15 @@ class TLoginForm extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(onPressed: () => Get.to(() => const SignupScreen()), child: Text(TTexts.createAccount.tr)),
+
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => Get.to(() =>Otp()), // Pass null
+                child: Text(TTexts.createAccount.tr),
+              ),
             ),
           ],
         ),

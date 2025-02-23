@@ -20,136 +20,52 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationState extends State<Notifications> {
-  final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _isInitialized = false;
-   FirebaseApi firebaseApi = FirebaseApi();
-   
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
   @override
   void initState() {
     super.initState();
-    _initializeNotifications();
-    _setupFirebaseMessaging();
+    initializeNotifications();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      String title = message.notification?.title ?? 'No Title';
+      String body = message.notification?.body ?? 'No Body';
+      String imageUrl = message.data['image_url'] ?? '';
+      String targetScreen = message.data['target_screen'] ?? '';
+
+      showNotification(title, body, imageUrl);
+      saveNotificationToFirestore(title, body, imageUrl: imageUrl, targetScreen: targetScreen);
+    });
   }
 
- Future<void> _initializeNotifications() async {
-    try {
-      // Create notification channel group
-      const AndroidNotificationChannelGroup channelGroup = AndroidNotificationChannelGroup(
-        'product_updates_group',
-        'Product Updates',
-        description: 'Notifications related to product updates and offers',
-      );
-      await _notificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannelGroup(channelGroup);
+  Future<void> initializeNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('notification_icon');
 
-      // Create notification channel
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'product_updates_channel',
-        'Product Updates',
-        description: 'Channel for product updates notifications',
-        importance: Importance.high,
-        playSound: true,
-        enableVibration: true,
-        groupId: 'product_updates_group',
-      );
-      await _notificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-          ?.createNotificationChannel(channel);
+    const InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid);
 
-      // Initialize settings - CHANGED HERE to use @mipmap/ic_launcher
-      const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        if (response.payload != null) {
+          print('Notification Payload: ${response.payload}');
+        }
+      },
+    );
+  }
 
-      const InitializationSettings initializationSettings =
-          InitializationSettings(android: initializationSettingsAndroid);
+  Future<void> showNotification(String title, String body, String? imageUrl) async {
+    BigPictureStyleInformation? bigPictureStyleInformation;
 
-      await _notificationsPlugin.initialize(
-        initializationSettings,
-        onDidReceiveNotificationResponse: _handleNotificationTap,
-      );
-
-      setState(() => _isInitialized = true);
-    } catch (e) {
-      debugPrint('Error initializing notifications: $e');
-      TLoaders.errorSnackBar(
-        title: 'Error'.tr,
-        message: 'Failed to initialize notifications'.tr,
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      bigPictureStyleInformation = BigPictureStyleInformation(
+        ByteArrayAndroidBitmap.fromBase64String(imageUrl),
+        contentTitle: title,
+        summaryText: body,
       );
     }
-  }
-
-  void _setupFirebaseMessaging() {
-    FirebaseMessaging.onMessage.listen(_handleFirebaseMessage);
-    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-  }
-
-  Future<void> _handleFirebaseMessage(RemoteMessage message) async {
-    if (!_isInitialized) return;
-    print('Handling Firebase message...');
-    final Map<String, dynamic> data = message.data;
-    // print notification data
-    print('Notification data: $data');
-    try {
-      final String title = message.notification?.title ?? 'No Title';
-      final String body = message.notification?.body ?? 'No Body';
-      final String imageUrl = message.data['image_url'] ?? '';
-      final String targetScreen = message.data['target_screen'] ?? '';
-
-      // Save to Firestore first
-      await _saveNotificationToFirestore(
-        title: title,
-        body: body,
-        imageUrl: imageUrl,
-        targetScreen: targetScreen,
-      );
-
-      // Then show the notification
-      if (imageUrl.isNotEmpty) {
-        final String? base64Image = await _downloadAndEncodeImage(imageUrl);
-        await _showNotification(title, body, base64Image);
-      } else {
-        await _showNotification(title, body, null);
-      }
-    } catch (e) {
-      debugPrint('Error handling Firebase message: $e');
-    }
-  }
-
-  Future<void> _handleNotificationTap(NotificationResponse response) async {
-    if (response.payload != null) {
-      final Map<String, dynamic> payload = json.decode(response.payload!);
-      if (payload['targetScreen'] != null && payload['targetScreen'].isNotEmpty) {
-        Get.toNamed(payload['targetScreen']);
-      }
-    }
-  }
-
-  Future<String?> _downloadAndEncodeImage(String imageUrl) async {
-    try {
-      final response = await http.get(Uri.parse(imageUrl));
-      if (response.statusCode == 200) {
-        return base64Encode(response.bodyBytes);
-      }
-      return null;
-    } catch (e) {
-      debugPrint('Error downloading image: $e');
-      return null;
-    }
-  }
-
- Future<void> _showNotification(String title, String body, String? base64Image) async {
-    try {
-      BigPictureStyleInformation? bigPictureStyleInformation;
-      if (base64Image != null) {
-        bigPictureStyleInformation = BigPictureStyleInformation(
-          ByteArrayAndroidBitmap.fromBase64String(base64Image),
-          contentTitle: title,
-          summaryText: body,
-          hideExpandedLargeIcon: true,
-        );
-      }
 
       final AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
         'product_updates_channel',
@@ -309,59 +225,77 @@ class _NotificationState extends State<Notifications> {
                   ? _formatTimestamp(notification['timestamp'] as Timestamp)
                   : 'Unknown Date';
 
-              return Dismissible(
-                key: Key(doc.id),
-                direction: DismissDirection.endToStart,
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 16),
-                  child: const Icon(Icons.delete, color: Colors.white),
-                ),
-                onDismissed: (_) => _deleteNotification(doc.id),
-                child: Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: ListTile(
-                    leading: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        _NotificationImage(
-                          imageUrl: imageUrl,
-                          onTap: targetScreen.isNotEmpty
-                              ? () => Get.toNamed(targetScreen)
-                              : null,
-                        ),
-                        if (!isRead)
-                          const Positioned(
-                            top: 0,
-                            right: 0,
-                            child: _UnreadIndicator(),
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: ListTile(
+                  leading: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          if (targetScreen.isNotEmpty) {
+                            Navigator.pushNamed(context, targetScreen);
+                          }
+                        },
+                        child: imageUrl.isNotEmpty
+                            ? ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            imageUrl,
+                            width: 90,
+                            height:100,
+                            fit: BoxFit.cover,
                           ),
-                      ],
-                    ),
-                    title: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          body,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        )
+                            : const Icon(Icons.notifications, size: 40),
+                      ),
+                      if (!isRead)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            width: 12,
+                            height: 12,
+                            decoration: const BoxDecoration(
+                              color: TColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          formattedTimestamp,
-                          style: const TextStyle(color: Colors.grey, fontSize: 10),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      _markAsRead(doc.id);
-                      Get.to(
-                        () => NotificationDetailPage(
+                    ],
+                  ),
+                  title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              body,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 50),
+                      Text(
+                        formattedTimestamp,
+                        style: const TextStyle(color: Colors.grey, fontSize: 10),
+                      ),],
+                  ),
+                  onTap: () async {
+                    await FirebaseFirestore.instance
+                        .collection('Notifications')
+                        .doc(docId)
+                        .update({'isRead': true});
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NotificationDetailPage(
                           title: title,
                           body: body,
                           imageUrl: imageUrl,
@@ -376,6 +310,55 @@ class _NotificationState extends State<Notifications> {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class _NotificationImage extends StatelessWidget {
+  final String imageUrl;
+  final VoidCallback? onTap;
+
+  const _NotificationImage({
+    required this.imageUrl,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageUrl.isEmpty) {
+      return const Icon(Icons.notifications, size: 40);
+    }
+
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+          imageUrl,
+          width: 90,
+          height: 100,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return const Icon(Icons.notifications, size: 40);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _UnreadIndicator extends StatelessWidget {
+  const _UnreadIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 12,
+      height: 12,
+      decoration: const BoxDecoration(
+        color: TColors.primary,
+        shape: BoxShape.circle,
       ),
     );
   }

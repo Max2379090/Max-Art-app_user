@@ -61,7 +61,7 @@ class DateOfBirth extends StatelessWidget {
                             lastDate: DateTime.now(),
                           );
                           controller.dateOfBirth.text =
-                              DateFormat('dd-MM-yyyy').format(pickedDate!);
+                              DateFormat('dd-MM-yyyy').format(pickedDate);
                                                 },
                       ),
                     ),

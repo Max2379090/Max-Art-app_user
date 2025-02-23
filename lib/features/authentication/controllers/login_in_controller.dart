@@ -20,6 +20,7 @@ class LoginController extends GetxController {
   final password = TextEditingController();
   final userController = Get.put(UserController());
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> loginFormKey2 = GlobalKey<FormState>();
 
   @override
   void onInit() {
