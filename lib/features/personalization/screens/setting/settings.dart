@@ -169,7 +169,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       builder: (builder) {
         return FractionallySizedBox(
           heightFactor: 0.5,

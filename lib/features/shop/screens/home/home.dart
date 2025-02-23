@@ -16,6 +16,7 @@ import '../../../../utils/device/device_utility.dart';
 import '../../controllers/brand_controller.dart';
 import '../../controllers/product/product_controller.dart';
 import '../all_products/all_products.dart';
+import '../billpayment/billpayment.dart';
 import '../brand/all_brands.dart';
 import '../brand/brand.dart';
 import '../favourites/favourite.dart';
@@ -84,14 +85,16 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwItems),
           _buildFeaturedProducts(context, productController),
           const SizedBox(height: TSizes.spaceBtwSections),
-          _buildSectionHeading(
-            context,
-            title: 'Favorite products'.tr,
-            onPressed: () => Get.to(() => const FavouriteScreen()),
-          ),
-          const SizedBox(height: TSizes.spaceBtwItems),
           const TPromoSlider2(),
           const SizedBox(height: TSizes.spaceBtwSections),
+
+          _buildSectionHeading(
+            context,
+            title: 'Paiement de facture'.tr,
+            onPressed: () => Get.to(() => const FavouriteScreen()),
+          ),
+          BillPaymentScreen(),
+          const SizedBox(height: TSizes.spaceBtwItems),
           _buildSectionHeading(
             context,
             title: 'Featured Brands'.tr,
