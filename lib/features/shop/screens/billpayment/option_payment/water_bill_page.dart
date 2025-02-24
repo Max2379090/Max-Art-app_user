@@ -202,11 +202,14 @@ class WaterBillPage extends StatelessWidget {
                               height: 100,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            "Camwater Bills/Factures",
-                            style: TextStyle(fontSize: 12, ),
-                          ),
+
+                          Flexible(
+                            child: Text(
+                              "Camwater Bills",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w500),
+                            ),
+                          )
                         ],
                       ),
                     ),

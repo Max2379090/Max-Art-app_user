@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../personalization/screens/setting/settings.dart';
+import 'message page/MessagePage_send.dart';
 
 class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
@@ -140,13 +141,8 @@ class _SupportScreenState extends State<SupportScreen>
                   children: [
                     // "Write Now" Button
                     ElevatedButton(
-                      onPressed: () async {
-                        const whatsappUrl = 'https://wa.me/654235532?text=Hello%20there!';
-                        if (await canLaunch(whatsappUrl)) {
-                          await launch(whatsappUrl);
-                        } else {
-                          throw 'Could not launch $whatsappUrl';}
-                      },
+
+
                       style: ElevatedButton.styleFrom(
                         backgroundColor: TColors.primary,
                         shape: RoundedRectangleBorder(
@@ -154,6 +150,7 @@ class _SupportScreenState extends State<SupportScreen>
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                       ),
+                      onPressed: () { Get.to(() => ChatPage()); },
                       child:Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

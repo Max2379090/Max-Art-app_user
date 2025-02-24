@@ -17,6 +17,7 @@ import '../../controllers/brand_controller.dart';
 import '../../controllers/product/product_controller.dart';
 import '../all_products/all_products.dart';
 import '../billpayment/billpayment.dart';
+import '../billpayment/liste_for_all_service.dart';
 import '../brand/all_brands.dart';
 import '../brand/brand.dart';
 import '../favourites/favourite.dart';
@@ -90,8 +91,8 @@ class HomeScreen extends StatelessWidget {
 
           _buildSectionHeading(
             context,
-            title: 'Paiement de facture'.tr,
-            onPressed: () => Get.to(() => const FavouriteScreen()),
+            title: 'Bill payment'.tr,
+            onPressed: () => Get.to(() =>  ListeForAllService()),
           ),
           BillPaymentScreen(),
           const SizedBox(height: TSizes.spaceBtwItems),

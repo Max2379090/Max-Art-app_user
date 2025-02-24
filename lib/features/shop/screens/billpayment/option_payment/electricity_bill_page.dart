@@ -201,10 +201,14 @@ class ElectricityBillPage extends StatelessWidget {
                               height: 100,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            "ENEO Bills/Postpaid",
-                          ),
+
+                          Flexible(
+                            child: Text(
+                              "ENEO Bills/Postpaid",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w500),
+                            ),
+                          )
                         ],
                       ),
                     ),

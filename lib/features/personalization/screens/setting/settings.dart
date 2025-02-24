@@ -163,8 +163,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _buildLanguageDialog(BuildContext context) {
     final List<Map<String, dynamic>> locales = [
-      {'name': 'English', 'locale': const Locale('en', 'US')},
-      {'name': 'Français', 'locale': const Locale('fr', 'FR')},
+      {'name': 'English', 'locale': const Locale('en', 'US'), 'flag': 'assets/flags/us.png'},
+      {'name': 'Français', 'locale': const Locale('fr', 'FR'), 'flag': 'assets/flags/fr.png'},
     ];
 
     showModalBottomSheet(
@@ -174,10 +174,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return FractionallySizedBox(
           heightFactor: 0.5,
           child: Container(
-            padding: const EdgeInsets.all(TSizes.lg),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: locales.map((locale) => ListTile(
+                leading: Image.asset(locale['flag'], width: 30, height: 30),
                 title: Text(locale['name']),
                 onTap: () {
                   Get.updateLocale(locale['locale']);

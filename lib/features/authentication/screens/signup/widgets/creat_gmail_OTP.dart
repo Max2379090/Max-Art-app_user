@@ -48,57 +48,50 @@ class Otp extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
-              Obx(() => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  ChoiceChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.phone, color: Colors.white), // Phone icon
-                        const SizedBox(width: 5), // Space between icon and text
-                        const Text(
-                          'Phone Number',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
+              const SizedBox(height: 15),
+              Obx(() => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ChoiceChip(
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.phone, color: Colors.white),
+                          const SizedBox(width: 2),
+                          const Text('Phone Number', style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      selected: !isEmailSelected.value,
+                      onSelected: (selected) {
+                        isEmailSelected.value = false;
+                      },
+                      selectedColor: TColors.primary,
+                      backgroundColor: Colors.grey,
                     ),
-                    selected: !isEmailSelected.value,
-                    onSelected: (selected) {
-                      isEmailSelected.value = false;
-                    },
-                    selectedColor: TColors.primary,
-                    backgroundColor: Colors.grey,
-                  ),
-
-                  SizedBox(width: 20),
-                  ChoiceChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.email, color: Colors.white), // Email icon
-                        const SizedBox(width: 5), // Space between icon and text
-                        const Text(
-                          'Email',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
+                    const SizedBox(width: 2),
+                    ChoiceChip(
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.email, color: Colors.white),
+                          const SizedBox(width: 2),
+                          const Text('Email', style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      selected: isEmailSelected.value,
+                      onSelected: (selected) {
+                        isEmailSelected.value = true;
+                      },
+                      selectedColor: TColors.primary,
+                      backgroundColor: Colors.grey,
                     ),
-                    selected: isEmailSelected.value,
-                    onSelected: (selected) {
-                      isEmailSelected.value = true;
-                    },
-                    selectedColor: TColors.primary,
-                    backgroundColor: Colors.grey,
-                  ),
-
-
-
-                ],
-              )),
-              const SizedBox(height: 20),
+                  ],
+                ),
+              )
+              ),
+              const SizedBox(height: 30),
               Obx(() => SizedBox(
                 width: 400,
                 child: isEmailSelected.value

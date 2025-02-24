@@ -28,8 +28,8 @@ class BillPaymentScreen extends StatelessWidget {
         children: [
           // Row with Image and GridView
           Container(
-            width: 500, // Full screen width (adjustable)
-            height: 205, // Set height as required
+            width: 300, // Full screen width (adjustable)
+            height: 250, // Set height as required
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -41,8 +41,8 @@ class BillPaymentScreen extends StatelessWidget {
                   child: Image.asset(
                     'assets/images/banners/FACTURE2.png', // Replace with your image
                     fit: BoxFit.cover,
-                    width: 150, // Fixed width for the image
-                    height: 220, // Fixed height for the image
+                    width: 140, // Fixed width for the image
+                    height: 177, // Fixed height for the image
                   ),
                 ),
                 const SizedBox(width: 15), // Spacing between the image and GridView
@@ -56,7 +56,7 @@ class BillPaymentScreen extends StatelessWidget {
                       crossAxisCount: 2, // Show two items per row
                       crossAxisSpacing: 10, // Spacing between items
                       mainAxisSpacing: 10, // Spacing between items
-                      childAspectRatio: 1, // Adjust aspect ratio for smaller items
+                      childAspectRatio: 0.8, // Adjust aspect ratio for smaller items
                     ),
                     itemCount: 4,
                     itemBuilder: (context, index) {
@@ -154,16 +154,16 @@ class _PaymentOptionState extends State<PaymentOption> {
               highlightColor: Colors.grey[100]!,
               child: Icon(
                 widget.icon,
-                size: 60,
+                size: 40,
                 color: TColors.primary,
               ),
             )
-                : Icon(widget.icon, size: 60, color: TColors.primary),
-            const SizedBox(height: 10),
+                : Icon(widget.icon, size: 45, color: TColors.primary),
+            const SizedBox(height: 5),
             Text(
               widget.label,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w500),
             ),
           ],
         ),
