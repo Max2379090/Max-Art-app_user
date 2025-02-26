@@ -12,6 +12,8 @@ import 'otp_page_number.dart';
 class Otp extends StatelessWidget {
   final RxBool isEmailSelected = false.obs;
 
+  const Otp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

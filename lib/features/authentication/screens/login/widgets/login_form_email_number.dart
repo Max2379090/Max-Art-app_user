@@ -1,19 +1,12 @@
 import 'package:country_code_text_field/country_code_text_field.dart';
-import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
-import '../../../../../utils/validators/validation.dart';
 import '../../../controllers/login_in_controller.dart';
-import '../../password_configuration/forget_password.dart';
-import '../../signup/signup.dart';
 import '../../signup/widgets/creat_gmail_OTP.dart';
-import '../../signup/widgets/otp_page_email.dart';
-import '../../signup/widgets/otp_page_number.dart';
 import '../login_password.dart';
 
 class LoginFormEmailNumber extends StatelessWidget {

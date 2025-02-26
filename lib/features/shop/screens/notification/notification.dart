@@ -321,7 +321,6 @@ class _NotificationImage extends StatelessWidget {
 
   const _NotificationImage({
     required this.imageUrl,
-    this.onTap,
   });
 
   @override
@@ -370,7 +369,6 @@ class _NotificationImage extends StatelessWidget {
 
   const _NotificationImage({
     required this.imageUrl,
-    this.onTap,
   });
 
   @override

@@ -57,7 +57,7 @@ class UserModel {
     String firstName = nameParts[0].toLowerCase();
     String lastName = nameParts.length > 1 ? nameParts[1].toLowerCase() : "";
 
-    return "Max_${firstName}${lastName}"; // Add "Max_" prefix
+    return "Max_$firstName$lastName"; // Add "Max_" prefix
   }
 
   /// Static function to create an empty user model.

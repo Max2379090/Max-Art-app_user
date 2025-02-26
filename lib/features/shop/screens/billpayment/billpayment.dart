@@ -150,7 +150,7 @@ class _PaymentOptionState extends State<PaymentOption> {
             // Shimmer effect on the icon
             isLoading
                 ? Shimmer.fromColors(
-              baseColor:TColors.primary!,
+              baseColor:TColors.primary,
               highlightColor: Colors.grey[100]!,
               child: Icon(
                 widget.icon,

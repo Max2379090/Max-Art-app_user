@@ -89,11 +89,11 @@ class LoginFormPassword extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () => Get.to(() => print('object')),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.transparent), // Transparent background
-                  elevation: MaterialStateProperty.all(0), // No shadow
-                  shadowColor: MaterialStateProperty.all(Colors.transparent), // No shadow color
-                  side: MaterialStateProperty.all(BorderSide(color: Colors.transparent, width: 2)), // Border outline
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  backgroundColor: WidgetStateProperty.all(Colors.transparent), // Transparent background
+                  elevation: WidgetStateProperty.all(0), // No shadow
+                  shadowColor: WidgetStateProperty.all(Colors.transparent), // No shadow color
+                  side: WidgetStateProperty.all(BorderSide(color: Colors.transparent, width: 2)), // Border outline
+                  shape: WidgetStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12), // Rounded corners
                   )),
                 ),

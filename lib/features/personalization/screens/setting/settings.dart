@@ -12,7 +12,6 @@ import '../../../../common/widgets/texts/section_heading.dart';
 import '../../../../home_menu.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
-import '../../../../utils/helpers/helper_functions.dart';
 import '../../../shop/screens/cart/cart.dart';
 import '../../../shop/screens/contact_us/contact_us.dart';
 import '../../../shop/screens/coupon/coupon.dart';
