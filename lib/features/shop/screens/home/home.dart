@@ -21,6 +21,7 @@ import '../billpayment/liste_for_all_service.dart';
 import '../brand/all_brands.dart';
 import '../brand/brand.dart';
 import '../favourites/favourite.dart';
+import '../ticket_office/ticket_office_screen.dart';
 import 'widgets/header_categories.dart';
 import 'widgets/header_search_container.dart';
 import 'widgets/home_appbar.dart';
@@ -95,6 +96,13 @@ class HomeScreen extends StatelessWidget {
             onPressed: () => Get.to(() =>  ListeForAllService()),
           ),
           BillPaymentScreen(),
+          const SizedBox(height: TSizes.spaceBtwItems),
+          _buildSectionHeading(
+            context,
+            title: 'Ticket office'.tr,
+            onPressed: () => Get.to(() =>  ListeForAllService()),
+          ),
+          TicketOfficeScreen(),
           const SizedBox(height: TSizes.spaceBtwItems),
           _buildSectionHeading(
             context,

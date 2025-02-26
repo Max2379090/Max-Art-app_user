@@ -1,5 +1,5 @@
 import 'package:country_code_text_field/country_code_text_field.dart';
-import 'package:email_otp/email_otp.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
