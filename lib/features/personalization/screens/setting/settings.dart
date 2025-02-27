@@ -69,7 +69,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     TUserProfileTile(onPressed: () => Get.to(() => const ProfileScreen())),
-                    const SizedBox(height: TSizes.spaceBtwSections),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 80,
+                      width: 460,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white24, // Background color
+
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Account Balance',
+                                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: TColors.white),
+                                  ),
+                                  Text(
+                                    '250 000 F CFA',
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+
+                          Container(
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2), // Light background for the icon
+                              shape: BoxShape.circle,
+                            ),
+                            child:IconButton(onPressed: () {
+                              // Add action here
+                            },icon: Icon(Iconsax.add, color: Colors.white, size: 30),
+                          ),
+                          )],
+                      ),
+                    ),
+                    const SizedBox(height:50),
+
+
                   ],
                 ),
               ),

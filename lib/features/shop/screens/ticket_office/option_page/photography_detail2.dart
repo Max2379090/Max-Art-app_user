@@ -3,14 +3,14 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../../utils/constants/colors.dart';
 
-class PhotographyPage extends StatefulWidget {
-  const PhotographyPage({super.key});
+class PhotographyPage2 extends StatefulWidget {
+  const PhotographyPage2({super.key});
 
   @override
-  _PhotographyPageState createState() => _PhotographyPageState();
+  _PhotographyPage2State createState() => _PhotographyPage2State();
 }
 
-class _PhotographyPageState extends State<PhotographyPage> {
+class _PhotographyPage2State extends State<PhotographyPage2> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, String>> filteredSubscriptions = [];
 
@@ -86,9 +86,11 @@ class _PhotographyPageState extends State<PhotographyPage> {
             Navigator.pop(context); // Navigates back to the previous screen
           },
         ),
-        title: const Text(
-          "Shooting Photo",
-          style: TextStyle(fontSize: 20, color: Colors.white),
+        title: Center(
+          child: const Text(
+            "Shooting Photo",
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
         ),
         backgroundColor: TColors.primary, // Replace with your primary color
         actions: [
@@ -111,7 +113,7 @@ class _PhotographyPageState extends State<PhotographyPage> {
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(2)),
               child: Image.asset(
-                'assets/images/banners/banner photo.jpg', // Replace with your image path
+                'assets/images/banners/Banner_YAOUNDE.jpg', // Replace with your image path
                 fit: BoxFit.cover,
                 height: 200,
                 width: double.infinity,
@@ -127,13 +129,13 @@ class _PhotographyPageState extends State<PhotographyPage> {
                   children: [
                     const Icon(Iconsax.star1, color: Color(0xFFF9A825)),
                     const SizedBox(width: 5),
-                    const Text("70,5 (100 avis)"),
+                    const Text("82 (150 avis)"),
                   ],
                 ),
-                //const Text(
-                 // "1000 F Achat minimum",
-                  //style: TextStyle(fontWeight: FontWeight.bold),
-                //),
+                const Text(
+                  "1000 F Achat minimum",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ],
             ),
             const SizedBox(height: 16),
@@ -142,7 +144,7 @@ class _PhotographyPageState extends State<PhotographyPage> {
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: "Search in Shooting Photo",
+                hintText: "Search in Max Art Photography",
                 prefixIcon: Icon(Iconsax.search_normal),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -368,32 +370,32 @@ class _PhotographyPageState extends State<PhotographyPage> {
 
                                     // Input Field
                                     Container(
-                                      width: 400,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: SizedBox(
-                                        width: 400, // Adjust width as needed
-                                        height: 100, // Adjust height as needed
-                                        child: TextFormField(
-                                          decoration: InputDecoration(
-                                            hintText: "Add additional instructions",
-                                            border: OutlineInputBorder(),
-                                            filled: true,
-                                            fillColor: Colors.grey[300],
-                                          ),
-                                          keyboardType: TextInputType.text,
-                                          obscureText: false,
-                                          maxLines: 1,
-                                          style: const TextStyle(fontSize: 16, color: Colors.black),
-                                          onChanged: (value) {
-                                            print("User typed: $value");
-                                          },
+                                        width: 400,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
-                                      )
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: SizedBox(
+                                          width: 400, // Adjust width as needed
+                                          height: 100, // Adjust height as needed
+                                          child: TextFormField(
+                                            decoration: InputDecoration(
+                                              hintText: "Add additional instructions",
+                                              border: OutlineInputBorder(),
+                                              filled: true,
+                                              fillColor: Colors.grey[300],
+                                            ),
+                                            keyboardType: TextInputType.text,
+                                            obscureText: false,
+                                            maxLines: 1,
+                                            style: const TextStyle(fontSize: 16, color: Colors.black),
+                                            onChanged: (value) {
+                                              print("User typed: $value");
+                                            },
+                                          ),
+                                        )
                                     ),
                                     const SizedBox(height: 10),
                                     Center(
@@ -438,24 +440,24 @@ class _PhotographyPageState extends State<PhotographyPage> {
                                     const SizedBox(height: 10),
 
                                     // Note Section
-                                   // Row(
-                                     // children: [
-                                       // const Text(
-                                        //  "NOTE:",
-                                        //  style: TextStyle(
-                                         //   fontSize: 10,
-                                         //   fontWeight: FontWeight.w700,
-                                         //   color: Colors.blue, // Replace with your primary color
-                                         // ),
-                                        //),
-                                       // const SizedBox(width: 8),
-                                       // const Expanded(
-                                        //  child: Text(
-                                         //   "Please enter the 14-digit code of your decoder",
-                                         //   style: TextStyle(fontSize: 10, color: Colors.blue), // Replace with your primary color
-                                        //  ),
-                                      //  ),
-                                     // ],
+                                    // Row(
+                                    // children: [
+                                    // const Text(
+                                    //  "NOTE:",
+                                    //  style: TextStyle(
+                                    //   fontSize: 10,
+                                    //   fontWeight: FontWeight.w700,
+                                    //   color: Colors.blue, // Replace with your primary color
+                                    // ),
+                                    //),
+                                    // const SizedBox(width: 8),
+                                    // const Expanded(
+                                    //  child: Text(
+                                    //   "Please enter the 14-digit code of your decoder",
+                                    //   style: TextStyle(fontSize: 10, color: Colors.blue), // Replace with your primary color
+                                    //  ),
+                                    //  ),
+                                    // ],
                                     //),
                                     const SizedBox(height: 40),
                                     SizedBox(
