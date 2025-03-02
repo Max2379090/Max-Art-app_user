@@ -4,6 +4,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 
 import '../../../../../utils/constants/colors.dart';
+import '../../../../../utils/helpers/helper_functions.dart';
 import '../creat_compte_with_email.dart';
 import '../signup_email.dart';
 
@@ -20,6 +21,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

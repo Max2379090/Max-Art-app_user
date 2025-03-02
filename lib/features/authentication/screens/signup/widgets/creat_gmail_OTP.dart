@@ -12,6 +12,8 @@ import 'otp_page_number.dart';
 class Otp extends StatelessWidget {
   final RxBool isEmailSelected = false.obs;
 
+   Otp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,9 +38,10 @@ class Otp extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(15),
-                child: Image.network(
-                  "https://firebasestorage.googleapis.com/v0/b/sos1-5421b.appspot.com/o/Banners%2Femails-concept-illustration_114360-1355%20copie.jpg?alt=media&token=d264492d-de6b-4654-95a3-323174c586df",
+                child: Image.asset(
+                  "assets/icons/payment_methods/choode-email-and-phone-OTP.png",
                   height: 350,
+                  width: 400,
                   fit: BoxFit.contain,
                 ),
               ),

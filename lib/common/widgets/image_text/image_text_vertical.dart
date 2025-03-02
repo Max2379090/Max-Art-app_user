@@ -51,7 +51,7 @@ class TVerticalImageAndText extends StatelessWidget {
               padding: TSizes.sm * 1,
               isNetworkImage: isNetworkImage,
               backgroundColor: backgroundColor,
-              overlayColor: THelperFunctions.isDarkMode(context) ? TColors.light : TColors.primary,
+              overlayColor: THelperFunctions.isDarkMode(context) ? TColors.black : TColors.primary,
             ),
             const SizedBox(height: TSizes.spaceBtwItems / 2),
             SizedBox(width: 55, child: TBrandTitleText(title: title, color: textColor)),

@@ -19,6 +19,7 @@ import '../../../shop/screens/coupon/coupon.dart';
 import '../../../shop/screens/notification/notification.dart';
 import '../../../shop/screens/order/order.dart';
 import '../../../shop/screens/payment_detail/payment_liste.dart';
+import '../../../shop/screens/wallet/wallet_page.dart';
 import '../../controllers/user_controller.dart';
 import '../address/address.dart';
 import '../profile/profile.dart';
@@ -105,9 +106,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               color: Colors.white.withOpacity(0.2), // Light background for the icon
                               shape: BoxShape.circle,
                             ),
-                            child:IconButton(onPressed: () {
-                              // Add action here
-                            },icon: Icon(Iconsax.add, color: Colors.white, size: 30),
+                            child:IconButton(onPressed: () => Get.to(() =>TopUpScreen())
+
+                            ,icon: Icon(Iconsax.add, color: Colors.white, size: 30),
                           ),
                           )],
                       ),
