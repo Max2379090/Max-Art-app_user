@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../utils/constants/colors.dart';
@@ -245,7 +246,7 @@ class StartimesPage extends StatelessWidget {
                                       const SizedBox(height: 10),
                                       Center(
                                           child: Container(
-                                            width: 170, // Set the width of the container
+                                            width: 190, // Set the width of the container
                                             height: 35, // Set the height of the container
                                             decoration: BoxDecoration(
                                               color: Colors.grey[300], // Background color
@@ -265,10 +266,30 @@ class StartimesPage extends StatelessWidget {
                                                         fontWeight: FontWeight.bold,
                                                       ),),
                                                       const SizedBox(width: 5),
-                                                      Text('0 FCFA',style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.bold,color: TColors.primary
-                                                      ),)
+                                                      StreamBuilder<DocumentSnapshot>(
+                                                        stream: FirebaseFirestore.instance.collection('Users').doc('Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2').snapshots(),
+                                                        builder: (context, snapshot) {
+                                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                                            return CircularProgressIndicator(color: Colors.white);
+                                                          }
+                                                          if (!snapshot.hasData || !snapshot.data!.exists) {
+                                                            return Text(
+                                                              "0 F CFA",
+                                                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: TColors.primary),
+                                                            );
+                                                          }
+
+                                                          var data = snapshot.data!;
+                                                          double balance = (data['balance'] is String)
+                                                              ? double.tryParse(data['balance']) ?? 0.0
+                                                              : (data['balance'] as num).toDouble();
+
+                                                          return Text(
+                                                            "${balance.toStringAsFixed(0)} F CFA",
+                                                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: TColors.primary),
+                                                          );
+                                                        },
+                                                      ),
                                                     ],
                                                   ),
                                                 ),

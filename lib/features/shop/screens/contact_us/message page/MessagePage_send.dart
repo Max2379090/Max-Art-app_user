@@ -32,6 +32,12 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context); // Navigates back to the previous screen
+          },
+        ),
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

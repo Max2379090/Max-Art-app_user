@@ -1,18 +1,21 @@
 
 import 'package:flutter/material.dart';
 import '../../../../../utils/constants/colors.dart';
+import '../../../../../utils/helpers/helper_functions.dart';
 
 class WaterBillPage extends StatelessWidget {
   const WaterBillPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final dark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("List of services"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), color: dark ? TColors.light : Colors.black
         ),
       ),
       body: Padding(

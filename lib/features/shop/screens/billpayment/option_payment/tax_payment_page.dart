@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../utils/constants/colors.dart';
+import '../../../../../utils/helpers/helper_functions.dart';
 
 class TaxPaymentPage extends StatelessWidget {
   const TaxPaymentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("List of services"),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          icon:Icon(Icons.arrow_back, color: dark ? TColors.light : TColors.black),
+          onPressed: () {
+            Navigator.pop(context); // Navigates back to the previous screen
+          },
         ),
       ),
       body: Padding(

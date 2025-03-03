@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../common/widgets/list_tiles/setting_notification.dart';
 import '../../../../common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:flutter/material.dart';
@@ -89,12 +91,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 children: [
                                   Text(
                                     'Account Balance',
-                                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: TColors.white),
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: TColors.white),
                                   ),
-                                  Text(
-                                    '250 000 F CFA',
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                                  StreamBuilder<DocumentSnapshot>(
+                                    stream: FirebaseFirestore.instance.collection('Users').doc('Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2').snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                        return CircularProgressIndicator(color: Colors.white);
+                                      }
+                                      if (!snapshot.hasData || !snapshot.data!.exists) {
+                                        return Text(
+                                          "0 F CFA",
+                                          style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600, color: Colors.white),
+                                        );
+                                      }
+
+                                      var data = snapshot.data!;
+                                      double balance = (data['balance'] is String)
+                                          ? double.tryParse(data['balance']) ?? 0.0
+                                          : (data['balance'] as num).toDouble();
+
+                                      return Text(
+                                        "${balance.toStringAsFixed(0)} F CFA",
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+                                      );
+                                    },
                                   ),
+
+
+
                                 ],
                               ),
                             ],
@@ -208,6 +233,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _buildLanguageDialog(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
     final List<Map<String, dynamic>> locales = [
       {'name': 'English', 'locale': const Locale('en', 'US'), 'flag': 'assets/flags/us.png'},
       {'name': 'Français', 'locale': const Locale('fr', 'FR'), 'flag': 'assets/flags/fr.png'},
@@ -215,7 +241,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor:dark ? TColors.black : TColors.light,
       builder: (builder) {
         return FractionallySizedBox(
           heightFactor: 0.5,
@@ -237,4 +263,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
     );
   }
+
+
 }

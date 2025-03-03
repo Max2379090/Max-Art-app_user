@@ -20,10 +20,6 @@ class _TopUpScreenState extends State<TopUpScreen> {
   final String userId = "Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2"; // Replace with actual user ID
   String selectedPaymentMethod = 'Mobile Money';
 
-  double _topUpAmount = 0.0;
-  double _topUpFees = 0.0;
-  double _totalAmount = 0.0;
-
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
@@ -41,6 +37,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20),
@@ -49,6 +46,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
             children: [
               Row(
                 children: [
+
                   const Text("Amount to add Max Store"),
                   SizedBox(width: 5),
                   GestureDetector(
@@ -75,30 +73,19 @@ class _TopUpScreenState extends State<TopUpScreen> {
                     child: Icon(
                       Icons.info,
                       size: 16,
-                      color: dark ? TColors.light : TColors.black,
+                      color:dark ? TColors.light : TColors.black,
                     ),
                   ),
-                ],
-              ),
+                ],),
               SizedBox(height: 8),
               TextField(
                 controller: _amountController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  suffixText: 'FCFA',
-
+                  hintText: 'FCFA',
+                  labelText: 'FCFA',
                   border: OutlineInputBorder(),
                 ),
-                onChanged: (value) {
-                  double? amount = double.tryParse(value);
-                  if (amount != null && amount > 0) {
-                    setState(() {
-                      _topUpAmount = amount;
-                      _topUpFees = calculateTopUpFees(amount);
-                      _totalAmount = calculateTotalAmount(amount, _topUpFees);
-                    });
-                  }
-                },
               ),
               SizedBox(height: 30),
               Row(
@@ -129,11 +116,10 @@ class _TopUpScreenState extends State<TopUpScreen> {
                     child: Icon(
                       Icons.info,
                       size: 16,
-                      color: dark ? TColors.light : TColors.black,
+                      color:dark ? TColors.light : TColors.black,
                     ),
                   ),
-                ],
-              ),
+                ],),
               SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +142,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text("Help Message"),
-                            content: Text("Enter your Mobile Money number"),
+                            content: Text("Enter your Mobil Money number"),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -172,10 +158,9 @@ class _TopUpScreenState extends State<TopUpScreen> {
                     child: Icon(
                       Icons.info,
                       size: 16,
-                      color: dark ? TColors.light : TColors.black,
+                      color:dark ? TColors.light : TColors.black,
                     ),
                   ),
-
                   SizedBox(width:100),
                   GestureDetector(
                     onTap: () {
@@ -185,98 +170,95 @@ class _TopUpScreenState extends State<TopUpScreen> {
                           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                         ),
                         builder: (context) {
-                          return FractionallySizedBox(
-                            heightFactor:1, // Set the height factor to 0.6
-                            child: Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min, // Makes it take only necessary space
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text(
-                                        "Add an",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      const Text(
-                                        "additional number",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: TColors.primary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 25),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text("Phone Number"),
-                                      SizedBox(width: 5),
-                                      GestureDetector(
-                                        onTap: () {
-                                          // Show the dialog when the icon is tapped
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: Text("Help Message"),
-                                                content: Text("Please enter the Contract No or Bill No found on your ENEO Bill"),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop(); // Close the dialog
-                                                    },
-                                                    child: Text("OK"),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Icon(
-                                          Icons.info,
-                                          size: 16,
-                                          color: dark ? TColors.light : TColors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  CountryCodeTextField(
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      labelText: 'Phone Number'.tr,
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(),
+                          return Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min, // Makes it take only necessary space
+                              children: [
+
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Add an",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    initialCountryCode: 'CM',
-                                  ),
-                                  SizedBox(height: 40),
-                                  ElevatedButton(
-                                    onPressed: () {},
-                                    style: ElevatedButton.styleFrom(
-                                      minimumSize: Size(double.infinity, 50),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                                    const SizedBox(width: 5),
+                                    const Text(
+                                      "additional number",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: TColors.primary,
                                       ),
                                     ),
-                                    child: Text('Add'),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text("Phone Number"),
+                                    SizedBox(width: 5),
+                                    GestureDetector(
+                                      onTap: () {
+                                        // Show the dialog when the icon is tapped
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text("Help Message"),
+                                              content: Text("Please enter the Contract No or Bill No found on your ENEO Bill"),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop(); // Close the dialog
+                                                  },
+                                                  child: Text("OK"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Icon(
+                                        Icons.info,
+                                        size: 16,
+                                        color:dark ? TColors.light : TColors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                CountryCodeTextField(
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    labelText: 'Phone Number'.tr,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(),
+                                    ),
                                   ),
-                                  SizedBox(height: 20),
-                                ],
-                              ),
+                                  initialCountryCode: 'CM',
+                                ),
+                                SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(double.infinity, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: Text('Add'),
+                                ),
+                                SizedBox(height: 20),
+                              ],
                             ),
                           );
                         },
                       );
-
                     },
                     child: Container(
                       width: 140,
@@ -307,8 +289,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
                       ),
                     ),
                   )
-                ],
-              ),
+                ],),
               SizedBox(height: 10),
               CountryCodeTextField(
                 keyboardType: TextInputType.number,
@@ -325,88 +306,87 @@ class _TopUpScreenState extends State<TopUpScreen> {
                           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                         ),
                         builder: (context) {
-                          return FractionallySizedBox(
-                            heightFactor: 0.6, // Set the height factor to 0.6
-                            child: Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min, // Ensures the sheet takes only necessary space
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Text(
-                                        "Choose",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      const Text(
-                                        "a number",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: TColors.primary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 20),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 335,
-                                        padding: EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[350],
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('+237 690573912', style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
-                                            Icon(Icons.check_circle, color: Colors.green),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Icon(Icons.cancel, color: Colors.grey[350]),
-                                    ],
-                                  ),
-                                  SizedBox(height: 25),
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      // Handle "Add" button action
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      minimumSize: Size(double.infinity, 50),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
+                          return Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min, // Ensures the sheet takes only necessary space
+                              children: [
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Choose",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    icon: Icon(Icons.add), // Add icon here
-                                    label: Text('Add a second number'),
+                                    const SizedBox(width: 5),
+                                    const Text(
+                                      "a number",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: TColors.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 50,
+                                      width: 335,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[350],
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+
+                                          Text('+237 690573912', style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
+                                          Icon(Icons.check_circle, color: Colors.green),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Icon(Icons.cancel, color: Colors.grey[350],),
+                                  ],
+                                ),
+
+                                SizedBox(height: 25),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    // Handle "Add" button action
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(double.infinity, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
-                                  SizedBox(height: 20),
-                                  Text(
-                                    'Attention! You can use 03(three).',
-                                    style: TextStyle(fontSize: 12, color: dark ? TColors.light : TColors.black),
-                                  ),
-                                ],
-                              ),
+                                  icon: Icon(Icons.add), // Add icon here
+                                  label: Text('Add a second number'),
+                                ),
+
+                                SizedBox(height: 20),
+
+                                Text('Attention! You can use 03(three).',style: TextStyle(fontSize: 12, color:dark ? TColors.light : TColors.black,)),
+                              ],
                             ),
                           );
                         },
                       );
-
                     },
                     child: Icon(Icons.arrow_drop_down), // Dropdown icon inside the text field
                   ),
                 ),
                 initialCountryCode: 'CM',
               ),
+
+
               SizedBox(height: 100),
               Container(
                 padding: EdgeInsets.all(16),
@@ -417,44 +397,32 @@ class _TopUpScreenState extends State<TopUpScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSummaryRow('Top-up amount', '${_topUpAmount.toStringAsFixed(0)} FCFA'),
-                    _buildSummaryRow('Top-up fees', '${_topUpFees.toStringAsFixed(0)} FCFA'),
-                    _buildSummaryRow('Total amount you will pay', '${_totalAmount.toStringAsFixed(0)} FCFA', isTotal: true),
+                    _buildSummaryRow('Top-up amount', '0 FCFA'),
+                    _buildSummaryRow('Top-up fees', '0 FCFA'),
+                    _buildSummaryRow('Total amount you will pay', '0 FCFA', isTotal: true),
                   ],
                 ),
               ),
               SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () async {
-            if (_topUpAmount > 0) {
-              await addToBalance(context, userId, _topUpAmount,);
-
-              // Clear the top-up amount and any other form-related data
-              setState(() {
-                _topUpAmount = 0;
-                 _topUpFees = 0;
-                _totalAmount = 0;// or reset to the initial state
-              });
-
-              // Optionally show a success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Amount successfully added to balance")),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Please enter a valid amount")),
-              );
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: Text('Continue'),
-        ),
-
+              ElevatedButton(
+                onPressed: () async {
+                  double? amount = double.tryParse(_amountController.text);
+                  if (amount != null && amount > 0) {
+                    await addToBalance(context, "Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2", amount);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Please enter a valid amount")),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text('Continue'),
+              ),
             ],
           ),
         ),
@@ -478,6 +446,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
               width: 70,
               height: 70,
               fit: BoxFit.contain,
+
             ),
           ),
           SizedBox(height: 5),
@@ -486,7 +455,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: selectedPaymentMethod == method ? FontWeight.bold : FontWeight.normal,
-              color: selectedPaymentMethod == method ? TColors.primary : TColors.darkGrey,
+              color: selectedPaymentMethod == method ? TColors.primary : TColors.darkGrey ,
             ),
           ),
         ],
@@ -506,19 +475,11 @@ class _TopUpScreenState extends State<TopUpScreen> {
       ),
     );
   }
-
-  double calculateTopUpFees(double amount) {
-    // Assuming a 5% fee for top-up
-    return amount * 0.05;
-  }
-
-  double calculateTotalAmount(double amount, double fees) {
-    return amount + fees;
-  }
 }
 
 Future<void> addToBalance(BuildContext context, String userId, double amount) async {
-  DocumentReference userRef = FirebaseFirestore.instance.collection('Users').doc(userId);
+  DocumentReference userRef =
+  FirebaseFirestore.instance.collection('Users').doc(userId);
 
   return FirebaseFirestore.instance.runTransaction((transaction) async {
     DocumentSnapshot snapshot = await transaction.get(userRef);
@@ -538,7 +499,6 @@ Future<void> addToBalance(BuildContext context, String userId, double amount) as
     print("Balance updated successfully!");
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Balance updated successfully!")),
-
     );
   }).catchError((error) {
     print("Failed to update balance: $error");
