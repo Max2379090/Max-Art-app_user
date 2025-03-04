@@ -257,7 +257,7 @@ class OrderController extends GetxController {
           MaterialPageRoute(builder: (context) =>
               SuccessPayment(image: TImages.paymentSuccessfulAnimation, title: 'Payment Success!'.tr,  subTitle: 'Your payment has been successfully made, thank you for your trust.'.tr,
                 onPressed: () => Get.offAll(() => const HomeMenu()),
-                onPressed2: () => Get.offAll(() => const PaymentListScreen()),),
+                onPressed2: () => Get.offAll(() => PaymentListScreen(userId: 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2',)),),
           ),
         );
         return; // Stop further processing once SUCCESSFUL is confirmed

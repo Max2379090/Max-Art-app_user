@@ -18,8 +18,15 @@ class UserAddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = AddressController.instance;
     return Scaffold(
-      appBar: TAppBar(
-        showBackArrow: true,
+      appBar:
+      AppBar(
+        backgroundColor: TColors.primary,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text('Addresses'.tr, style: Theme.of(context).textTheme.headlineSmall),
       ),
       body: Padding(

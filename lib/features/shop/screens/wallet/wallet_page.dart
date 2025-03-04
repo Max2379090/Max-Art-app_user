@@ -424,36 +424,40 @@ class _TopUpScreenState extends State<TopUpScreen> {
                 ),
               ),
               SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () async {
-            if (_topUpAmount > 0) {
-              await addToBalance(context, userId, _topUpAmount,);
+              ElevatedButton(
+                onPressed: () async {
+                  if (_topUpAmount > 0) {
+                    await addToBalance(context, userId, _topUpAmount);
 
-              // Clear the top-up amount and any other form-related data
-              setState(() {
-                _topUpAmount = 0;
-                 _topUpFees = 0;
-                _totalAmount = 0;// or reset to the initial state
-              });
+                    // Add the payment record
+                    await addPayment(userId, _topUpAmount, 'Successful'); // Ensure the correct status is passed
 
-              // Optionally show a success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Amount successfully added to balance")),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Please enter a valid amount")),
-              );
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: Text('Continue'),
-        ),
+                    // Clear the top-up amount and any other form-related data
+                    setState(() {
+                      _topUpAmount = 0;
+                      _topUpFees = 0;
+                      _totalAmount = 0; // Reset to initial state
+                    });
+
+                    // Optionally show a success message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Amount successfully added to balance")),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Please enter a valid amount")),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text('Continue'),
+              ),
+
 
             ],
           ),
@@ -538,7 +542,6 @@ Future<void> addToBalance(BuildContext context, String userId, double amount) as
     print("Balance updated successfully!");
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Balance updated successfully!")),
-
     );
   }).catchError((error) {
     print("Failed to update balance: $error");
@@ -546,4 +549,24 @@ Future<void> addToBalance(BuildContext context, String userId, double amount) as
       SnackBar(content: Text("Failed to update balance")),
     );
   });
+}
+
+Future<void> addPayment(String userId, double amount, String status) async {
+  try {
+    CollectionReference payments = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('PaymentUser');
+
+    await payments.add({
+      'amount': amount,  // Keep as number for calculations
+      'amount_string': '+${amount.toStringAsFixed(0)} FCFA',  // Convert to string without decimals
+      'status': status,
+      'created_at': FieldValue.serverTimestamp(),
+    });
+
+    print('Payment added successfully!');
+  } catch (e) {
+    print('Error adding payment: $e');
+  }
 }

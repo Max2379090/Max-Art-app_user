@@ -173,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Iconsax.wallet,
                       title: 'My History payment'.tr,
                       subTitle: 'Order Payment History'.tr,
-                      onTap: () => Get.to(() => const PaymentListScreen()),
+                      onTap: () => Get.to(() => PaymentListScreen(userId: 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2',)),
                     ),
                     TSettingsMenuTile(
                       icon: Iconsax.discount_shape,

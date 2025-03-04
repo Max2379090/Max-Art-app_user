@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
+import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
 import 'widgets/orders_list.dart';
 
@@ -12,7 +13,17 @@ class OrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       /// -- AppBar
-      appBar: TAppBar(title: Text('My Orders'.tr, style: Theme.of(context).textTheme.headlineSmall), showBackArrow: true),
+      appBar:
+      AppBar(
+          backgroundColor: TColors.primary,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text('My Orders'.tr, style: Theme.of(context).textTheme.headlineSmall),
+      ),
       body: const Padding(
         padding: EdgeInsets.all(TSizes.defaultSpace),
 

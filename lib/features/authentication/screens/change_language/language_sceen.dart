@@ -62,16 +62,17 @@ class _LanguageState extends State<LanguageScreen> {
       {'name': 'English', 'locale': const Locale('en', 'US'), 'flag': 'assets/flags/us.png'},
       {'name': 'Français', 'locale': const Locale('fr', 'FR'), 'flag': 'assets/flags/fr.png'},
     ];
-
+    final dark = THelperFunctions.isDarkMode(context);
     showModalBottomSheet(
+
       context: context,
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return FractionallySizedBox(
           heightFactor: 0.5,
           child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration:  BoxDecoration(
+              color: dark ? TColors.black : TColors.light,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             padding: const EdgeInsets.all(TSizes.lg),

@@ -254,8 +254,8 @@ class CanalplusPage extends StatelessWidget {
                                       const SizedBox(height: 10),
                                       Center(
                                           child: Container(
-                                            width: 190, // Set the width of the container
-                                            height: 35, // Set the height of the container
+                                            width: 200, // Set the width of the container
+                                            height: 40, // Set the height of the container
                                             decoration: BoxDecoration(
                                               color: Colors.grey[300], // Background color
                                               borderRadius: BorderRadius.circular(15), // Rounded corners
