@@ -28,10 +28,13 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: TColors.lightGrey,
       appBar: AppBar(
+    backgroundColor: TColors.primary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -49,15 +52,15 @@ class _ChatPageState extends State<ChatPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(width: 10),
-                Text('Customer Service',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                Text('Customer Service',style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500,color: TColors.white)),
                 SizedBox(width: 10),
-                Text('Online',style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+                Text('Online',style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500,color: TColors.white)),
               ],
             ),// Replace with the contact's name
           ],
         ),
         actions: [
-          IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+          IconButton(icon: Icon(Icons.more_vert,color: TColors.white,), onPressed: () {}),
         ],
       ),
       body: Column(

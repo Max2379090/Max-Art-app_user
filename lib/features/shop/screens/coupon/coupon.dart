@@ -17,7 +17,6 @@ class CouponScreen extends StatelessWidget {
     final isDark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar:
-
       AppBar(
         backgroundColor: TColors.primary,
         leading: IconButton(
@@ -26,7 +25,10 @@ class CouponScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title: Text('Available Coupons'.tr, style: Theme.of(context).textTheme.headlineSmall),
+        title: Text(
+          'Available Coupons'.tr,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
 
       body: Obx(

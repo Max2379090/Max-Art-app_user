@@ -154,14 +154,16 @@ class DSTVPage extends StatelessWidget {
                                           ),
                                           padding: EdgeInsets.symmetric(horizontal: 10),
                                           child: TextFormField(
+
                                             decoration: InputDecoration(
                                               hintText: "Fill in the field",
                                               border: OutlineInputBorder(),
                                               filled: true, // Enables background color
                                               fillColor: Colors.grey[300], // Light grey background
                                             ),
-                                            keyboardType: TextInputType.text,
+                                            keyboardType: TextInputType.number,
                                             obscureText: false,
+                                            maxLength: 10,
                                             maxLines: 1,
                                             style: TextStyle(fontSize: 16, color: Colors.black),
                                             onChanged: (value) {
@@ -318,7 +320,7 @@ class DSTVPage extends StatelessWidget {
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: const Text(
-                                              "Please enter the DSTV Card Number (10 gigits)",
+                                              "Please enter the DSTV Card Number (10 digits)",
                                               style: TextStyle(fontSize: 10, color: TColors.primary),
                                             ),
                                           ),

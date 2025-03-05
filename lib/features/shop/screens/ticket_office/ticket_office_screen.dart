@@ -9,8 +9,8 @@ class TicketOfficeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Sample data for grid items
     final List<Map<String, dynamic>> items = [
-      {'image': 'assets/images/content/GettyImages-486359014_0.jpg', 'text': 'Beauty', 'color': 0xff5d4037, 'route': null},
       {'image': 'assets/images/content/eos-80d-2.jpg', 'text': 'Shooting Photo', 'color': 0xff9e9e9e, 'route':Photos()},
+      {'image': 'assets/images/content/GettyImages-486359014_0.jpg', 'text': 'Beauty', 'color': 0xff5d4037, 'route': null},
       {'image': 'assets/images/content/TICKET.jpg', 'text': 'Tickets', 'color': 0xff304ffe, 'route': null},
       {'image': 'assets/images/content/Thai_Elephants_Massage_Spa_Viersen_03.jpg', 'text': 'Care', 'color': 0xffffd600, 'route': null},
       {'image': 'assets/images/content/fitness.jpg', 'text': 'Sport', 'color': 0xff000000, 'route': null},

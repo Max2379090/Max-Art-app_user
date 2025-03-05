@@ -44,10 +44,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void initState() {
     super.initState();
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -139,104 +136,103 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     // Show Phone Number Input for "Mobile Money"
                     Obx(() {
                       if (selectedPaymentMethod.value.name == 'Mobile Money') {
-                        return  Column(
+                        return Column(
                           children: [
                             CountryCodeTextField(
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  labelText: 'Phone Number'.tr,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(),
-                                  ),
-                                  suffixIcon: GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                                        ),
-                                        builder: (context) {
-                                          return FractionallySizedBox(
-                                            heightFactor: 0.6, // Set the height factor to 0.6
-                                            child: Padding(
-                                              padding: EdgeInsets.all(20.0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min, // Ensures the sheet takes only necessary space
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      const Text(
-                                                        "Choose",
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      const Text(
-                                                        "a number",
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: TColors.primary,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 20),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        height: 50,
-                                                        width: 335,
-                                                        padding: EdgeInsets.all(8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.grey[350],
-                                                          borderRadius: BorderRadius.circular(8),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            Text('+237 690573912', style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
-                                                            Icon(Icons.check_circle, color: Colors.green),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      SizedBox(width: 10),
-                                                      Icon(Icons.cancel, color: Colors.grey[350]),
-                                                    ],
-                                                  ),
-                                                  SizedBox(height: 25),
-                                                  ElevatedButton.icon(
-                                                    onPressed: () {
-                                                      // Handle "Add" button action
-                                                    },
-                                                    style: ElevatedButton.styleFrom(
-                                                      minimumSize: Size(double.infinity, 50),
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(8),
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: 'Phone Number'.tr,
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(),
+                                ),
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                      ),
+                                      builder: (context) {
+                                        return FractionallySizedBox(
+                                          heightFactor: 0.6,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(20.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const Text(
+                                                      "Choose",
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.bold,
                                                       ),
                                                     ),
-                                                    icon: Icon(Icons.add), // Add icon here
-                                                    label: Text('Add a second number'),
+                                                    const SizedBox(width: 5),
+                                                    const Text(
+                                                      "a number",
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: TColors.primary,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 20),
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      height: 50,
+                                                      width: 335,
+                                                      padding: EdgeInsets.all(8),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey[350],
+                                                        borderRadius: BorderRadius.circular(8),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text('+237 690573912', style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
+                                                          Icon(Icons.check_circle, color: Colors.green),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    Icon(Icons.cancel, color: Colors.grey[350]),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 25),
+                                                ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    // Handle "Add" button action
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    minimumSize: Size(double.infinity, 50),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(8),
+                                                    ),
                                                   ),
-                                                  SizedBox(height: 20),
-                                                  Text(
-                                                    'Attention! You can use 03(three).',
-                                                    style: TextStyle(fontSize: 12, color: dark ? TColors.light : TColors.black),
-                                                  ),
-                                                ],
-                                              ),
+                                                  icon: Icon(Icons.add),
+                                                  label: Text('Add a second number'),
+                                                ),
+                                                SizedBox(height: 20),
+                                                Text(
+                                                  'Attention! You can use 03(three).',
+                                                  style: TextStyle(fontSize: 12, color: dark ? TColors.light : TColors.black),
+                                                ),
+                                              ],
                                             ),
-                                          );
-                                        },
-                                      );
-
-                                    },
-                                    child: Icon(Iconsax.arrow_down_1), // Dropdown icon inside the text field
-                                  ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Icon(Iconsax.arrow_down_1),
                                 ),
-                                initialCountryCode: 'CM',
+                              ),
+                              initialCountryCode: 'CM',
                             ),
                           ],
                         );
@@ -270,13 +266,69 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (subTotal <= 0) {
-                TLoaders.warningSnackBar(title: 'Empty Cart'.tr, message: 'Add items in the cart in order to proceed.'.tr);
+                TLoaders.warningSnackBar(
+                  title: 'Empty Cart'.tr,
+                  message: 'Add items in the cart in order to proceed.'.tr,
+                );
               } else if (selectedPaymentMethod.value.name == 'Mobile Money' && numberController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  TLoaders.warningSnackBar(title: 'Empty field'.tr, message: 'Add a payment number in order to proceed.'.tr),
+                  TLoaders.warningSnackBar(
+                    title: 'Empty field'.tr,
+                    message: 'Add a payment number in order to proceed.'.tr,
+                  ),
                 );
+              } else if (selectedPaymentMethod.value.name == 'Wallet Max Store') {
+                if (walletBalance.value >= subTotal) {
+                  double amountDebited = subTotal;
+                  double newBalance = walletBalance.value - amountDebited;
+
+                  try {
+                    var userId = 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2';
+
+                    await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+                      'balance': newBalance,
+                    });
+
+                    await FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(userId)
+                        .collection('Transactions')
+                        .add({
+                      'userId': userId,
+                      'amount': amountDebited,
+                      'paymentMethod': 'Wallet Max Store',
+                      'timestamp': FieldValue.serverTimestamp(),
+                      'status': 'Successful',
+                      'description': 'Order payment',
+                    });
+
+                    orderController.processOrder(amountDebited);
+                    orderController.createData(
+                      amountDebited.toStringAsFixed(0),
+                      'N/A',
+                      'Wallet Max Store',
+                      'description'.tr,
+                      context,
+                    );
+
+                    TLoaders.successSnackBar(
+                      title: 'Payment Successful'.tr,
+                      message: 'Your payment has been processed successfully.'.tr,
+                    );
+                  } catch (e) {
+                    TLoaders.warningSnackBar(
+                      title: 'Error'.tr,
+                      message: 'An error occurred while updating the balance.'.tr,
+                    );
+                  }
+                } else {
+                  TLoaders.warningSnackBar(
+                    title: 'Insufficient Balance'.tr,
+                    message: 'You do not have enough balance to complete this purchase.'.tr,
+                  );
+                }
               } else {
                 orderController.processOrder(subTotal);
                 orderController.createData(

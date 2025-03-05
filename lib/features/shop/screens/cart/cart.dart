@@ -21,6 +21,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       /// -- AppBar
       appBar:
+
       AppBar(
         backgroundColor: TColors.primary,
         leading: IconButton(
@@ -29,7 +30,10 @@ class CartScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        title:Text('Cart'.tr, style: Theme.of(context).textTheme.headlineSmall)
+        title: Text(
+          "Cart".tr,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
       body: Obx(() {
         /// Nothing Found Widget

@@ -255,7 +255,10 @@ class _NotificationState extends State<Notifications> {
             Navigator.pop(context);
           },
         ),
-        title: Text('Notifications'.tr, style: Theme.of(context).textTheme.headlineSmall),
+        title: Text(
+          "Notifications".tr,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore

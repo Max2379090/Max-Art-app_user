@@ -1,8 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../../common/widgets/success_screen/success_payment.dart';
+import '../../../../../home_menu.dart';
 import '../../../../../utils/constants/colors.dart';
+import '../../../../../utils/constants/image_strings.dart';
+import '../../../../../utils/popups/loaders.dart';
+import '../../payment_detail/payment_liste.dart';
 
 class PhotographyPage extends StatefulWidget {
   const PhotographyPage({super.key});
@@ -53,8 +59,56 @@ class _PhotographyPageState extends State<PhotographyPage> {
     },
 
   ];
+  final String userId = 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2';
+  final TextEditingController addadditionalinstructionsController = TextEditingController();
 
   @override
+  Future<double> getUserBalance() async {
+    var userDoc = await FirebaseFirestore.instance.collection('Users').doc(userId).get();
+    if (!userDoc.exists) return 0.0;
+    return (userDoc['balance'] as num).toDouble();
+  }
+
+  void processPayment(BuildContext context, Map<String, String> item) async {
+
+
+    double balance = await getUserBalance();
+    double? price = double.tryParse(item['price']!.split(' ')[0]);
+
+    if (price == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid price format.")));
+      return;
+    }
+
+    if (balance < price) {
+      TLoaders.warningSnackBar(
+        title: 'Insufficient Balance'.tr,
+        message: 'You do not have enough balance to complete this purchase.'.tr,
+      );
+      return;
+    }
+
+    await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+      'balance': balance - price,
+    });
+
+    await FirebaseFirestore.instance.collection('Users').doc(userId).collection('Services').add({
+      'userId': userId,
+      'amount': '$price FCFA',
+      'paymentMethod': 'Wallet Max Store',
+      'timestamp': FieldValue.serverTimestamp(),
+      'status': 'Successful',
+      'description': '${item['description']}',
+      'title': '${item['title']}',
+      'add additional instructions':addadditionalinstructionsController.text,
+    });
+
+
+    //TLoaders.successSnackBar(
+     // title: 'Payment Successful'.tr,
+     // message: 'Your payment has been processed successfully.'.tr,
+   // );
+  }
   void initState() {
     super.initState();
     filteredSubscriptions = subscriptions;
@@ -221,7 +275,7 @@ class _PhotographyPageState extends State<PhotographyPage> {
                       backgroundColor: Colors.white,
                       builder: (builder) {
                         return FractionallySizedBox(
-                          heightFactor: 0.75,
+                          heightFactor: 0.80,
                           child: Padding(
                             padding: EdgeInsets.only(
                               bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -288,7 +342,7 @@ class _PhotographyPageState extends State<PhotographyPage> {
                                     const SizedBox(height: 10),
                                     Center(
                                       child: Container(
-                                        width: 400,
+                                        width: 420,
                                         height: 150,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[300],
@@ -380,6 +434,7 @@ class _PhotographyPageState extends State<PhotographyPage> {
                                         width: 400, // Adjust width as needed
                                         height: 100, // Adjust height as needed
                                         child: TextFormField(
+                                          controller: addadditionalinstructionsController,
                                           decoration: InputDecoration(
                                             hintText: "Add additional instructions",
                                             border: OutlineInputBorder(),
@@ -399,7 +454,7 @@ class _PhotographyPageState extends State<PhotographyPage> {
                                     const SizedBox(height: 10),
                                     Center(
                                       child: Container(
-                                        width: 190,
+                                        width: 220,
                                         height: 35,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[300],
@@ -479,11 +534,41 @@ class _PhotographyPageState extends State<PhotographyPage> {
                                       width: double.infinity,
                                       height: 60,
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
+                                        onPressed: () async {
+                                          // Show the loading indicator
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false, // Prevent closing by tapping outside
+                                            builder: (BuildContext context) {
+                                              return Center(
+                                                child: CircularProgressIndicator(),
+                                              );
+                                            },
+                                          );
+
+                                          // Simulate a payment process that takes 3 seconds
+                                          await Future.delayed(Duration(seconds: 3));
+
+                                          // Perform payment processing
+                                           processPayment(context, item);
+
+                                          // Close the loading dialog
+                                          Navigator.of(context, rootNavigator: true).pop();
+
+                                          // Show the success screen
+                                          Get.offAll(() => SuccessPayment(
+                                            image: TImages.paymentSuccessfulAnimation,
+                                            title: 'Payment Success!'.tr,
+                                            subTitle: 'Your payment has been successfully made, thank you for your trust.'.tr,
+                                            onPressed: () => Get.offAll(() => const HomeMenu()),
+                                            onPressed2: () => Get.offAll(() => HistoryPage(userId: 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2')),
+                                          ));
                                         },
-                                        child: const Text("Confirm"),
+                                        style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
+                                        child: Text("Confirm Payment"),
                                       ),
+
+
                                     ),
                                   ],
                                 ),

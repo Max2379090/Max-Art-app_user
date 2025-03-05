@@ -21,7 +21,7 @@ class SuccessPayment extends StatelessWidget {
           child: Column(
             children: [
               /// Image
-              Lottie.asset(image, width: MediaQuery.of(context).size.width * 0.6),
+              Lottie.asset(image, width: MediaQuery.of(context).size.width * 1.5),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Title & SubTitle
