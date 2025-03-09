@@ -1,4 +1,3 @@
-import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -8,12 +7,8 @@ import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
 import '../../../../../utils/validators/validation.dart';
-import '../../../../shop/screens/home/home.dart';
 import '../../../controllers/login_in_controller.dart';
 import '../../password_configuration/forget_password.dart';
-import '../../signup/signup.dart';
-import '../../signup/widgets/creat_gmail_OTP.dart';
-import '../../signup/widgets/otp_page_email.dart';
 
 class LoginFormPassword extends StatelessWidget {
   const LoginFormPassword({

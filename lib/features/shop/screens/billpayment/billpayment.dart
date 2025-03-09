@@ -6,9 +6,6 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../utils/constants/colors.dart';
 
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import '../../../../utils/constants/colors.dart';
 import 'option_payment/electricity_bill_page.dart';
 import 'option_payment/tax_payment_page.dart';
 import 'option_payment/tv_subscription_page.dart';

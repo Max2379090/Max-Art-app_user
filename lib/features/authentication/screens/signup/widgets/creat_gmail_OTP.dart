@@ -1,9 +1,6 @@
 import 'package:country_code_text_field/country_code_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import '../../../../../utils/constants/colors.dart';
 import 'otp_page_email.dart';
 import 'otp_page_number.dart';
