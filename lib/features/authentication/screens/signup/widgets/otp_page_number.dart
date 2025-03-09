@@ -1,10 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-
 import '../../../../../utils/constants/colors.dart';
-import '../../../../../utils/helpers/helper_functions.dart';
 import '../singup_number.dart';
 
 class OtpScreen2 extends StatefulWidget {
@@ -20,9 +19,8 @@ class _OtpScreenState extends State<OtpScreen2> {
 
   @override
   Widget build(BuildContext context) {
-    final dark = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: dark ? TColors.black : Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'OTP Verification',
@@ -42,17 +40,16 @@ class _OtpScreenState extends State<OtpScreen2> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  "assets/images/banners/J (54).png",
-                  height: 300,
+                child: Image.network(
+                  "https://firebasestorage.googleapis.com/v0/b/sos1-5421b.appspot.com/o/Banners%2Fwordpress-seguranca-senha%20copie.jpg?alt=media&token=d586fc83-6d36-4d4d-9637-728fe5c8d914",
+                  height: 235,
                   fit: BoxFit.cover,
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
+              const Text(
                 'Enter the 4-digit OTP sent to your phone number',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,
-                color:dark ? TColors.white : Colors.black, ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
@@ -116,9 +113,9 @@ class _OtpScreenState extends State<OtpScreen2> {
                     const SnackBar(content: Text('OTP Resent Successfully!')),
                   );
                 },
-                child: Text(
+                child: const Text(
                   'Resend OTP',
-                  style: TextStyle(fontSize: 16, color:  dark ? TColors.white : Colors.black,),
+                  style: TextStyle(fontSize: 16, color: TColors.primary),
                 ),
               ),
             ],

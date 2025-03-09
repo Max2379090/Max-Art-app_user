@@ -9,7 +9,7 @@ import '../creat_compte_with_email.dart';
 import '../signup_email.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  const OtpScreen({super.key,});
 
   @override
   _OtpScreenState createState() => _OtpScreenState();

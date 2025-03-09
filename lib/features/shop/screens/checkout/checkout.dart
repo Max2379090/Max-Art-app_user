@@ -13,6 +13,7 @@ import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../../utils/popups/loaders.dart';
 import '../../../personalization/controllers/address_controller.dart';
+import '../../../personalization/controllers/user_controller.dart';
 import '../../controllers/product/cart_controller.dart';
 import '../../controllers/product/checkout_controller.dart';
 import '../../controllers/product/order_controller.dart';
@@ -48,7 +49,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = CheckoutController.instance;
+    final controller = UserController.instance;
     final dark = THelperFunctions.isDarkMode(context);
     final subTotal = cartController.totalCartPrice.value;
 
@@ -99,9 +100,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                     // Show Wallet Balance for "Wallet Max Store"
                     Obx(() {
+
+                      final String userId = "controller.user.value.id";
                       if (selectedPaymentMethod.value.name == 'Wallet Max Store') {
                         return StreamBuilder<DocumentSnapshot>(
-                          stream: FirebaseFirestore.instance.collection('Users').doc('Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2').snapshots(),
+                          stream: FirebaseFirestore.instance.collection('Users').doc(userId).snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return CircularProgressIndicator(color: Colors.white);
@@ -135,6 +138,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                     // Show Phone Number Input for "Mobile Money"
                     Obx(() {
+
                       if (selectedPaymentMethod.value.name == 'Mobile Money') {
                         return Column(
                           children: [
@@ -194,7 +198,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                       child: Row(
                                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                         children: [
-                                                          Text('+237 690573912', style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
+                                                          Text(controller.user.value.phoneNumber, style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
                                                           Icon(Icons.check_circle, color: Colors.green),
                                                         ],
                                                       ),
@@ -267,25 +271,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () async {
+              // Check if subTotal is valid
               if (subTotal <= 0) {
                 TLoaders.warningSnackBar(
                   title: 'Empty Cart'.tr,
-                  message: 'Add items in the cart in order to proceed.'.tr,
+                  message: 'Add items to the cart in order to proceed.'.tr,
                 );
-              } else if (selectedPaymentMethod.value.name == 'Mobile Money' && numberController.text.isEmpty) {
+              }
+              // Validate Mobile Money number
+              else if (selectedPaymentMethod.value.name == 'Mobile Money' && numberController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   TLoaders.warningSnackBar(
-                    title: 'Empty field'.tr,
-                    message: 'Add a payment number in order to proceed.'.tr,
+                    title: 'Empty Field'.tr,
+                    message: 'Add a payment number to proceed.'.tr,
                   ),
                 );
-              } else if (selectedPaymentMethod.value.name == 'Wallet Max Store') {
+
+              }
+
+              // Wallet Max Store payment method
+              else if (selectedPaymentMethod.value.name == 'Wallet Max Store') {
                 if (walletBalance.value >= subTotal) {
                   double amountDebited = subTotal;
                   double newBalance = walletBalance.value - amountDebited;
 
                   try {
-                    var userId = 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2';
+
+                    var userId = 'userId';
 
                     await FirebaseFirestore.instance.collection('Users').doc(userId).update({
                       'balance': newBalance,
@@ -329,7 +341,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     message: 'You do not have enough balance to complete this purchase.'.tr,
                   );
                 }
-              } else {
+              }
+              // Other payment methods
+              else {
                 orderController.processOrder(subTotal);
                 orderController.createData(
                   subTotal.toStringAsFixed(0),
@@ -352,6 +366,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ),
       ),
+
     );
   }
 

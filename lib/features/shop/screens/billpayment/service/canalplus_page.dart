@@ -108,6 +108,7 @@ class _CanalplusPageState extends State<CanalplusPage> {
       isScrollControlled: true,
       backgroundColor: Colors.white,
       builder: (builder) {
+        final String userId = "controller.user.value.id";
         return FractionallySizedBox(
           heightFactor: 0.6,
           child: Padding(
@@ -299,7 +300,7 @@ class _CanalplusPageState extends State<CanalplusPage> {
                                     ),),
                                     const SizedBox(width: 5),
                                     StreamBuilder<DocumentSnapshot>(
-                                      stream: FirebaseFirestore.instance.collection('Users').doc('Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2').snapshots(),
+                                      stream: FirebaseFirestore.instance.collection('Users').doc(userId).snapshots(),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState == ConnectionState.waiting) {
                                           return CircularProgressIndicator(color: Colors.white);

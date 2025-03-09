@@ -50,11 +50,12 @@ class LoginFormPassword extends StatelessWidget {
                   prefixIcon: const Icon(Iconsax.password_check),
                   suffixIcon: IconButton(
                     onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,
-                    icon: const Icon(Iconsax.eye_slash),
+                    icon: Icon(controller.hidePassword.value ? Iconsax.eye_slash : Iconsax.eye),
                   ),
                 ),
               ),
             ),
+
             const SizedBox(height: TSizes.spaceBtwInputFields / 2),
 
             /// Remember Me & Forget Password

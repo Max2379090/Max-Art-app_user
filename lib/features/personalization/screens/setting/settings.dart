@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final controller = UserController.instance;
-
+    final String userId = "controller.user.value.id";
     return PopScope(
       canPop: false,
       onPopInvoked: (value) async => Get.offAll(const HomeMenu()),
@@ -94,7 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: TColors.white),
                                   ),
                                   StreamBuilder<DocumentSnapshot>(
-                                    stream: FirebaseFirestore.instance.collection('Users').doc('Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2').snapshots(),
+                                    stream: FirebaseFirestore.instance.collection('Users').doc(userId).snapshots(),
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState == ConnectionState.waiting) {
                                         return CircularProgressIndicator(color: Colors.white);
@@ -173,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Iconsax.wallet,
                       title: 'My History payment'.tr,
                       subTitle: 'Order Payment History'.tr,
-                      onTap: () => Get.to(() =>  HistoryPage(userId: 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2',)),
+                      onTap: () => Get.to(() =>  HistoryPage(userId: userId,)),
                     ),
                     TSettingsMenuTile(
                       icon: Iconsax.discount_shape,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
+import 'package:intl_phone_field/intl_phone_field.dart';
 import '../../../../../utils/constants/colors.dart';
 import 'otp_page_email.dart';
 import 'otp_page_number.dart';
@@ -11,8 +11,6 @@ import 'otp_page_number.dart';
 
 class Otp extends StatelessWidget {
   final RxBool isEmailSelected = false.obs;
-
-   Otp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +36,9 @@ class Otp extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(15),
-                child: Image.asset(
-                  "assets/icons/payment_methods/choode-email-and-phone-OTP.png",
+                child: Image.network(
+                  "https://firebasestorage.googleapis.com/v0/b/sos1-5421b.appspot.com/o/Banners%2Femails-concept-illustration_114360-1355%20copie.jpg?alt=media&token=d264492d-de6b-4654-95a3-323174c586df",
                   height: 350,
-                  width: 400,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -51,50 +48,57 @@ class Otp extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 15),
-              Obx(() => SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ChoiceChip(
-                      label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.phone, color: Colors.white),
-                          const SizedBox(width: 2),
-                          const Text('Phone Number', style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
-                      selected: !isEmailSelected.value,
-                      onSelected: (selected) {
-                        isEmailSelected.value = false;
-                      },
-                      selectedColor: TColors.primary,
-                      backgroundColor: Colors.grey,
+              const SizedBox(height: 20),
+              Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(width: 10),
+                  ChoiceChip(
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.phone, color: Colors.white), // Phone icon
+                        const SizedBox(width: 5), // Space between icon and text
+                        const Text(
+                          'Phone Number',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 2),
-                    ChoiceChip(
-                      label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.email, color: Colors.white),
-                          const SizedBox(width: 2),
-                          const Text('Email', style: TextStyle(color: Colors.white)),
-                        ],
-                      ),
-                      selected: isEmailSelected.value,
-                      onSelected: (selected) {
-                        isEmailSelected.value = true;
-                      },
-                      selectedColor: TColors.primary,
-                      backgroundColor: Colors.grey,
+                    selected: !isEmailSelected.value,
+                    onSelected: (selected) {
+                      isEmailSelected.value = false;
+                    },
+                    selectedColor: TColors.primary,
+                    backgroundColor: Colors.grey,
+                  ),
+
+                  SizedBox(width: 20),
+                  ChoiceChip(
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.email, color: Colors.white), // Email icon
+                        const SizedBox(width: 5), // Space between icon and text
+                        const Text(
+                          'Email',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-              ),
-              const SizedBox(height: 30),
+                    selected: isEmailSelected.value,
+                    onSelected: (selected) {
+                      isEmailSelected.value = true;
+                    },
+                    selectedColor: TColors.primary,
+                    backgroundColor: Colors.grey,
+                  ),
+
+
+
+                ],
+              )),
+              const SizedBox(height: 20),
               Obx(() => SizedBox(
                 width: 400,
                 child: isEmailSelected.value
@@ -118,7 +122,7 @@ class Otp extends StatelessWidget {
                   decoration: InputDecoration(
 
                     suffixIcon: IconButton(
-                        onPressed: () => Get.to(() =>  OtpScreen2()),
+                      onPressed: () => Get.to(() =>  OtpScreen2()),
                       icon: const Icon(Icons.send_rounded, color: TColors.primary),
                     ),
                     labelText: 'Phone Number'.tr,

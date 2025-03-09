@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/helpers/helper_functions.dart';
+import '../../../personalization/controllers/user_controller.dart';
 
 class TopUpScreen extends StatefulWidget {
   const TopUpScreen({super.key});
@@ -16,9 +17,11 @@ class TopUpScreen extends StatefulWidget {
 }
 
 class _TopUpScreenState extends State<TopUpScreen> {
+  final controller = UserController.instance;
   final TextEditingController _amountController = TextEditingController();
-  final String userId = "Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2"; // Replace with actual user ID
+  final String userId = "controller.user.value.id"; // Replace with actual user ID
   String selectedPaymentMethod = 'Mobile Money';
+
 
   double _topUpAmount = 0.0;
   double _topUpFees = 0.0;
@@ -27,6 +30,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    TextEditingController phoneController = TextEditingController(text: controller.user.value.phoneNumber);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TColors.primary,
@@ -311,6 +315,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
               ),
               SizedBox(height: 10),
               CountryCodeTextField(
+                controller: phoneController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: 'Phone Number'.tr,
@@ -366,7 +371,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text('+237 690573912', style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
+                                            Text(controller.user.value.phoneNumber, style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
                                             Icon(Icons.check_circle, color: Colors.green),
                                           ],
                                         ),

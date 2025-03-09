@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,6 +9,7 @@ import '../../../utils/helpers/network_manager.dart';
 import '../../../utils/popups/full_screen_loader.dart';
 import '../../../utils/popups/loaders.dart';
 import '../../personalization/controllers/user_controller.dart';
+import '../screens/signup/widgets/otp_page_number.dart';
 
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
@@ -71,6 +73,8 @@ class LoginController extends GetxController {
       TLoaders.errorSnackBar(title: 'Oh Snap'.tr, message: e.toString());
     }
   }
+
+
 
   /// Google SignIn Authentication
   Future<void> googleSignIn() async {

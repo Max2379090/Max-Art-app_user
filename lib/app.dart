@@ -20,7 +20,7 @@ class App extends StatelessWidget {
       darkTheme: TAppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       translations: Localestring(),
-      locale: const Locale('fr', 'FR'),
+      locale: const Locale('en', 'US'),
       fallbackLocale: const Locale('en', 'US'),
       defaultTransition: Transition.fade,
       initialBinding: GeneralBindings(),
