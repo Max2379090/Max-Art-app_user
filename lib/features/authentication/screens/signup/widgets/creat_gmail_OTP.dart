@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:country_code_text_field/country_code_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,8 +39,8 @@ class Otp extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(15),
-                child: Image.network(
-                  "https://firebasestorage.googleapis.com/v0/b/sos1-5421b.appspot.com/o/Banners%2Femails-concept-illustration_114360-1355%20copie.jpg?alt=media&token=d264492d-de6b-4654-95a3-323174c586df",
+                child: Image.asset(
+                  "assets/icons/payment_methods/choode-email-and-phone-OTP.png",
                   height: 350,
                   fit: BoxFit.contain,
                 ),
@@ -140,5 +143,43 @@ class Otp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+Future<void> sendOtpSms(String userPhone) async {
+  // Create the URL with HTTPS scheme, host, and path
+  final url = Uri.https('xl5x8q.api.infobip.com', '/sms/2/text/advanced');
+
+  // Set up headers including your authorization key
+  final headers = {
+    'Authorization': 'App 286438dc9eff9a3bc5f4a6aa38084b9e-37111878-c4a0-4255-8879-5c1d71503f15',
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+
+  // Build the JSON payload with the provided phone number.
+  // You can replace the "text" field with a dynamic OTP if needed.
+  final body = json.encode({
+    "messages": [
+      {
+        "destinations": [
+          {"to": userPhone}
+        ],
+        "from": "447491163443",
+        "text": "Your OTP code is: 123456" // Replace with your OTP generation logic if needed
+      }
+    ]
+  });
+
+  try {
+    // Send the POST request
+    final response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('SMS sent successfully: ${response.body}');
+    } else {
+      print('Failed to send SMS. Status code: ${response.statusCode}, Body: ${response.body}');
+    }
+  } catch (e) {
+    print('Error sending SMS: $e');
   }
 }

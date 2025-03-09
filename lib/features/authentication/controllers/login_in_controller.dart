@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import '../../../data/repositories/authentication/authentication_repository.dart';
 import '../../../utils/constants/image_strings.dart';
@@ -105,6 +107,9 @@ class LoginController extends GetxController {
       TLoaders.errorSnackBar(title: 'Oh Snap'.tr, message: e.toString());
     }
   }
+
+
+
 
   /// Facebook SignIn Authentication
  // Future<void> facebookSignIn() async {
