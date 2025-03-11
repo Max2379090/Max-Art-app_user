@@ -271,46 +271,36 @@ class PaymentOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => widget.destination),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.black12, width: 1),
-          boxShadow: [
-            const BoxShadow(color: Colors.black12, blurRadius: 4),
-          ],
-        ),
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Shimmer effect on the icon
-            isLoading
-                ? Shimmer.fromColors(
-              baseColor:TColors.primary!,
-              highlightColor: Colors.grey[100]!,
-              child: Icon(
-                widget.icon,
-                size: 60,
-                color: TColors.primary,
-              ),
-            )
-                : Icon(widget.icon, size: 60, color: TColors.primary),
-            const SizedBox(height: 10),
-            Text(
-              widget.label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
+    return Container(
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 6,
+            spreadRadius: 2,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            icon,
+            width: 40,
+            height: 40,
+            color: Colors.teal,
+          ),
+          SizedBox(height: 8),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+        ],
       ),
     );
   }
