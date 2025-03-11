@@ -1,6 +1,8 @@
 import 'package:country_code_text_field/country_code_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
+
 import '../../../../../utils/constants/colors.dart';
 import 'otp_page_email.dart';
 import 'otp_page_number.dart';
@@ -9,7 +11,7 @@ import 'otp_page_number.dart';
 class Otp extends StatelessWidget {
   final RxBool isEmailSelected = false.obs;
 
-  const Otp({super.key});
+   Otp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +37,10 @@ class Otp extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(15),
-                child: Image.network(
-                  "https://firebasestorage.googleapis.com/v0/b/sos1-5421b.appspot.com/o/Banners%2Femails-concept-illustration_114360-1355%20copie.jpg?alt=media&token=d264492d-de6b-4654-95a3-323174c586df",
+                child: Image.asset(
+                  "assets/icons/payment_methods/choode-email-and-phone-OTP.png",
                   height: 350,
+                  width: 400,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -47,57 +50,50 @@ class Otp extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
-              Obx(() => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  ChoiceChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.phone, color: Colors.white), // Phone icon
-                        const SizedBox(width: 5), // Space between icon and text
-                        const Text(
-                          'Phone Number',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
+              const SizedBox(height: 15),
+              Obx(() => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ChoiceChip(
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.phone, color: Colors.white),
+                          const SizedBox(width: 2),
+                          const Text('Phone Number', style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      selected: !isEmailSelected.value,
+                      onSelected: (selected) {
+                        isEmailSelected.value = false;
+                      },
+                      selectedColor: TColors.primary,
+                      backgroundColor: Colors.grey,
                     ),
-                    selected: !isEmailSelected.value,
-                    onSelected: (selected) {
-                      isEmailSelected.value = false;
-                    },
-                    selectedColor: TColors.primary,
-                    backgroundColor: Colors.grey,
-                  ),
-
-                  SizedBox(width: 20),
-                  ChoiceChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.email, color: Colors.white), // Email icon
-                        const SizedBox(width: 5), // Space between icon and text
-                        const Text(
-                          'Email',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
+                    const SizedBox(width: 2),
+                    ChoiceChip(
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.email, color: Colors.white),
+                          const SizedBox(width: 2),
+                          const Text('Email', style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                      selected: isEmailSelected.value,
+                      onSelected: (selected) {
+                        isEmailSelected.value = true;
+                      },
+                      selectedColor: TColors.primary,
+                      backgroundColor: Colors.grey,
                     ),
-                    selected: isEmailSelected.value,
-                    onSelected: (selected) {
-                      isEmailSelected.value = true;
-                    },
-                    selectedColor: TColors.primary,
-                    backgroundColor: Colors.grey,
-                  ),
-
-
-
-                ],
-              )),
-              const SizedBox(height: 20),
+                  ],
+                ),
+              )
+              ),
+              const SizedBox(height: 30),
               Obx(() => SizedBox(
                 width: 400,
                 child: isEmailSelected.value

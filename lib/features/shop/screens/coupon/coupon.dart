@@ -16,15 +16,21 @@ class CouponScreen extends StatelessWidget {
     final CouponController controller = Get.put(CouponController());
     final isDark = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      appBar: AppBar(
+      appBar:
+      AppBar(
+        backgroundColor: TColors.primary,
         leading: IconButton(
-          icon:  Icon(Icons.arrow_back, color: isDark ?TColors.light : TColors.black,),
-          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        title:  Text('Available Coupons'.tr, style: TextStyle(color: isDark ? TColors.light : TColors.black,),),
-        centerTitle: true,
-        backgroundColor: isDark ? TColors.black : TColors.light,
+        title: Text(
+          'Available Coupons'.tr,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
+
       body: Obx(
             () {
           if (controller.coupons.isEmpty) {

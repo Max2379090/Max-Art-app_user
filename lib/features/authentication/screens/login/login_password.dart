@@ -32,7 +32,7 @@ class LoginPasswordScreen extends StatelessWidget {
                 /// Footer ()
                 //const TSocialButtons(),
 
-                const SizedBox(height: 200),
+                const SizedBox(height: 100),
               ],
             ),
           ),

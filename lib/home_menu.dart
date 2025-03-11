@@ -1,4 +1,5 @@
 import 'package:Max_store/utils/constants/colors.dart';
+import 'package:Max_store/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -14,6 +15,7 @@ class HomeMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
     final controller = Get.put(AppScreenController());
     return Scaffold(
       extendBody: true,
@@ -25,7 +27,7 @@ class HomeMenu extends StatelessWidget {
               height: 70,
               animationDuration: const Duration(milliseconds: 300),
               selectedIndex: controller.selectedMenu.value,
-              backgroundColor: Colors.white,
+              backgroundColor:dark ? TColors.darkerGrey : TColors.light,
               elevation: 5,
               indicatorColor: Colors.grey.withValues(alpha: 0.1),
               onDestinationSelected: (index) {
@@ -49,7 +51,7 @@ class HomeMenu extends StatelessWidget {
               onPressed: () {
                 Get.to(() => CategoryScreen());
               },
-              backgroundColor: TColors.primary,
+              backgroundColor: dark ? TColors.darkerGrey : TColors.primary,
               child: const Icon(Iconsax.category, color: Colors.white),
             ),
           ),

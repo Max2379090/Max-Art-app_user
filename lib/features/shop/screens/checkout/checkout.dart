@@ -21,7 +21,6 @@ import '../../models/payment_method_model.dart';
 import '../cart/widgets/cart_items.dart';
 import 'widgets/billing_address_section.dart';
 
-
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
 
@@ -30,18 +29,22 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-
   final checkoutController = CheckoutController.instance;
   final cartController = CartController.instance;
   final addressController = AddressController.instance;
   final orderController = Get.put(OrderController());
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+
   final Rx<PaymentMethodModel> selectedPaymentMethod = PaymentMethodModel.empty().obs;
+  final RxDouble walletBalance = 0.0.obs;
+
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
-  late final DataModel _dataModel;
 
-
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,162 +53,206 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final subTotal = cartController.totalCartPrice.value;
 
     return Scaffold(
-      appBar: TAppBar(
-          title: Text('Order Review'.tr), showBackArrow: true),
+      appBar: TAppBar(title: Text('Order Review'.tr), showBackArrow: true),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-
-              /// -- Items in Cart
               const TCartItems(showAddRemoveButtons: false),
               const SizedBox(height: TSizes.spaceBtwSections),
-
-              /// -- Coupon TextField
               const TCouponCode(),
               const SizedBox(height: TSizes.spaceBtwSections),
-
-              /// -- Billing Section
               TRoundedContainer(
                 showBorder: true,
                 padding: const EdgeInsets.all(TSizes.md),
-                backgroundColor: dark ? TColors.black : TColors
-                    .white,
+                backgroundColor: dark ? TColors.black : TColors.white,
                 child: Column(
                   children: [
-
-                    /// Pricing
                     TBillingAmountSection(subTotal: subTotal),
                     const SizedBox(height: TSizes.spaceBtwItems),
-
-                    /// Divider
                     const Divider(),
-                    const SizedBox(
-                        height: TSizes.spaceBtwItems),
-
-                    /// Payment Methods
-
+                    const SizedBox(height: TSizes.spaceBtwItems),
                     TSectionHeading(
                       title: 'Payment Method'.tr,
                       buttonTitle: 'Change'.tr,
                       showActionButton: false,
-                      onPressed: () {
-                        controller.selectPaymentMethod(context);
-                      },
                     ),
-                    const SizedBox(
-                        height: TSizes.spaceBtwItems / 2),
+                    const SizedBox(height: 20),
 
+                    // Payment Method Selection
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildPaymentMethodButton(
+                            PaymentMethodModel(name: 'Wallet Max Store', image: 'assets/icons/payment_methods/Wallet.jpg', )),
+                        _buildPaymentMethodButton(
+                            PaymentMethodModel(name: 'Mobile Money', image: 'assets/icons/payment_methods/orang_whiet_mtn.png')),
+                        _buildPaymentMethodButton(
+                            PaymentMethodModel(name: 'Bank Card', image: 'assets/icons/payment_methods/master-card.png')),
+                        _buildPaymentMethodButton(
+                            PaymentMethodModel(name: 'PayPal', image: 'assets/icons/payment_methods/paypal.png', )),
+                      ],
+                    ),
+
+                    const SizedBox(height: 25),
+
+                    // Show Wallet Balance for "Wallet Max Store"
+                    Obx(() {
+                      if (selectedPaymentMethod.value.name == 'Wallet Max Store') {
+                        return StreamBuilder<DocumentSnapshot>(
+                          stream: FirebaseFirestore.instance.collection('Users').doc('Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2').snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator(color: Colors.white);
+                            }
+
+                            if (!snapshot.hasData || !snapshot.data!.exists) {
+                              return Text(
+                                "0 F CFA",
+                                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600, color: Colors.white),
+                              );
+                            }
+
+                            var data = snapshot.data!;
+                            double balance = (data['balance'] is String)
+                                ? double.tryParse(data['balance']) ?? 0.0
+                                : (data['balance'] as num).toDouble();
+
+                            walletBalance.value = balance; // Updating the value
+
+                            return Obx(() {
+                              return Text(
+                                "Wallet Balance: ${walletBalance.value.toStringAsFixed(0)} F CFA",
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color:dark ? TColors.light: TColors.primary,),
+                              );
+                            });
+                          },
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    }),
+
+                    // Show Phone Number Input for "Mobile Money"
+                    Obx(() {
+                      if (selectedPaymentMethod.value.name == 'Mobile Money') {
+                        return Column(
+                          children: [
+                            CountryCodeTextField(
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: 'Phone Number'.tr,
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(),
+                                ),
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                      ),
+                                      builder: (context) {
+                                        return FractionallySizedBox(
+                                          heightFactor: 0.6,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(20.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const Text(
+                                                      "Choose",
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 5),
+                                                    const Text(
+                                                      "a number",
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: TColors.primary,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 20),
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      height: 50,
+                                                      width: 335,
+                                                      padding: EdgeInsets.all(8),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey[350],
+                                                        borderRadius: BorderRadius.circular(8),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text('+237 690573912', style: TextStyle(fontSize: 16, color:dark ? TColors.black : TColors.primary,)),
+                                                          Icon(Icons.check_circle, color: Colors.green),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    Icon(Icons.cancel, color: Colors.grey[350]),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 25),
+                                                ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    // Handle "Add" button action
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    minimumSize: Size(double.infinity, 50),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(8),
+                                                    ),
+                                                  ),
+                                                  icon: Icon(Icons.add),
+                                                  label: Text('Add a second number'),
+                                                ),
+                                                SizedBox(height: 20),
+                                                Text(
+                                                  'Attention! You can use 03(three).',
+                                                  style: TextStyle(fontSize: 12, color: dark ? TColors.light : TColors.black),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Icon(Iconsax.arrow_down_1),
+                                ),
+                              ),
+                              initialCountryCode: 'CM',
+                            ),
+                          ],
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    }),
+
+                    const SizedBox(height: TSizes.spaceBtwSections),
+                    const TAddressSection(isBillingAddress: false),
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                    const Divider(),
+                    const SizedBox(height: TSizes.spaceBtwItems),
                     Obx(
-                          () =>
-                          Row(
-                            children: [
-                              TRoundedContainer(
-                                width: 60,
-                                height: 35,
-                                backgroundColor: THelperFunctions
-                                    .isDarkMode(
-                                    context)
-                                    ? TColors.light
-                                    : TColors.white,
-                                padding: const EdgeInsets
-                                    .all(TSizes.sm),
-                                child: Image(
-                                    image: AssetImage(
-                                        controller.selectedPaymentMethod.value.image), fit: BoxFit.contain),),
-                              const SizedBox(
-                                  width: TSizes
-                                      .spaceBtwItems /
-                                      2),
-                              Text(controller.selectedPaymentMethod.value.name.toString(), style: Theme.of(context).textTheme.bodyLarge),
-                            ],
-                          ),
-                    ),
-
-                    const SizedBox(
-                        height: TSizes.spaceBtwItems / 2),
-                    Container(
-                      height: 65,
-                      // can customize height
-                      alignment: Alignment.topLeft,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius
-                            .circular(10),
-                        color: Colors.grey[100],),
-                      child:
-                      CountryCodeTextField(
-                        keyboardType: TextInputType.number,
-
-                        controller:numberController,
-
-                        decoration: InputDecoration(
-
-                          suffixIcon: IconButton(
-                              onPressed: () {controller.selectPaymentMethod(context);},
-                              icon: const Icon(Iconsax
-                                  .arrow_down_1,
-                                  color: Colors.black)
-                          ),
-                          labelText: 'Phone Number'.tr,
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(),
-                          ),
-                        ),
-                        initialCountryCode: 'CM',
+                          () => CheckboxListTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text('Billing Address is Same as Shipping Address'.tr),
+                        value: addressController.billingSameAsShipping.value,
+                        onChanged: (value) => addressController.billingSameAsShipping.value = value ?? true,
                       ),
                     ),
-
-
-                    const SizedBox(
-                        height: TSizes.spaceBtwSections),
-
-                    /// Address
-                    const TAddressSection(
-                        isBillingAddress: false),
-                    const SizedBox(
-                        height: TSizes.spaceBtwItems),
-
-                    /// Divider
-                    const Divider(),
-                    const SizedBox(
-                        height: TSizes.spaceBtwItems),
-
-                    /// Address Checkbox
-                    Obx(
-                          () =>
-                          CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            title: Text('Billing Address is Same as Shipping Address'.tr),
-                            value: addressController
-                                .billingSameAsShipping
-                                .value,
-                            onChanged: (value) =>
-                            addressController
-                                .billingSameAsShipping
-                                .value = value ?? true,
-                          ),
-                    ),
-                    const SizedBox(
-                        height: TSizes.spaceBtwItems),
-
-                    /// Divider
-                    Obx(() =>
-                    !addressController.billingSameAsShipping
-                        .value
-                        ? const Divider()
-                        : const SizedBox.shrink()),
-
-                    /// Shipping Address
-                    Obx(() =>
-                    !addressController.billingSameAsShipping
-                        .value
-                        ? const TAddressSection(
-                        isBillingAddress: true)
-                        : const SizedBox.shrink()),
                   ],
                 ),
               ),
@@ -214,37 +261,81 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ),
       ),
-
-
-      /// -- Checkout Button
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (subTotal <= 0) {
                 TLoaders.warningSnackBar(
                   title: 'Empty Cart'.tr,
                   message: 'Add items in the cart in order to proceed.'.tr,
                 );
-              } else if (numberController.text.isEmpty) {
+              } else if (selectedPaymentMethod.value.name == 'Mobile Money' && numberController.text.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   TLoaders.warningSnackBar(
                     title: 'Empty field'.tr,
                     message: 'Add a payment number in order to proceed.'.tr,
                   ),
                 );
+              } else if (selectedPaymentMethod.value.name == 'Wallet Max Store') {
+                if (walletBalance.value >= subTotal) {
+                  double amountDebited = subTotal;
+                  double newBalance = walletBalance.value - amountDebited;
+
+                  try {
+                    var userId = 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2';
+
+                    await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+                      'balance': newBalance,
+                    });
+
+                    await FirebaseFirestore.instance
+                        .collection('Users')
+                        .doc(userId)
+                        .collection('Transactions')
+                        .add({
+                      'userId': userId,
+                      'amount': amountDebited,
+                      'paymentMethod': 'Wallet Max Store',
+                      'timestamp': FieldValue.serverTimestamp(),
+                      'status': 'Successful',
+                      'description': 'Order payment',
+                    });
+
+                    orderController.processOrder(amountDebited);
+                    orderController.createData(
+                      amountDebited.toStringAsFixed(0),
+                      'N/A',
+                      'Wallet Max Store',
+                      'description'.tr,
+                      context,
+                    );
+
+                    TLoaders.successSnackBar(
+                      title: 'Payment Successful'.tr,
+                      message: 'Your payment has been processed successfully.'.tr,
+                    );
+                  } catch (e) {
+                    TLoaders.warningSnackBar(
+                      title: 'Error'.tr,
+                      message: 'An error occurred while updating the balance.'.tr,
+                    );
+                  }
+                } else {
+                  TLoaders.warningSnackBar(
+                    title: 'Insufficient Balance'.tr,
+                    message: 'You do not have enough balance to complete this purchase.'.tr,
+                  );
+                }
               } else {
-                print("");
-                // Call createData before processing the order
                 orderController.processOrder(subTotal);
                 orderController.createData(
                   subTotal.toStringAsFixed(0),
-                  "237${numberController.text}",
-                  controller.selectedPaymentMethod.value.name.toString(),
+                  selectedPaymentMethod.value.name == 'Mobile Money' ? "237${numberController.text}" : 'N/A',
+                  selectedPaymentMethod.value.name,
                   'description'.tr,
-                  // pass controller here
                   context,
                 );
               }
@@ -252,14 +343,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             child: RichText(
               text: TextSpan(
                 text: 'Confirm'.tr,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.5,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18.5),
                 children: <TextSpan>[
-                  TextSpan(
-                    text: ' ${checkoutController.getTotal(subTotal).toStringAsFixed(0)} FCFA',
-                  ),
+                  TextSpan(text: ' ${checkoutController.getTotal(subTotal).toStringAsFixed(0)} FCFA'),
                 ],
               ),
             ),
@@ -269,7 +355,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-
-
+  Widget _buildPaymentMethodButton(PaymentMethodModel method) {
+    return GestureDetector(
+      onTap: () {
+        selectedPaymentMethod.value = method;
+      },
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              method.image,
+              width: 50,
+              height: 50,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Obx(() => Text(
+            method.name,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: selectedPaymentMethod.value.name == method.name ? FontWeight.bold : FontWeight.normal,
+              color: selectedPaymentMethod.value.name == method.name ? TColors.primary : TColors.darkGrey,
+            ),
+          )),
+        ],
+      ),
+    );
+  }
 }
-

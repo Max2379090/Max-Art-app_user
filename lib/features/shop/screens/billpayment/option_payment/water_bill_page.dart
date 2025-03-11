@@ -1,18 +1,21 @@
 
 import 'package:flutter/material.dart';
 import '../../../../../utils/constants/colors.dart';
+import '../../../../../utils/helpers/helper_functions.dart';
 
 class WaterBillPage extends StatelessWidget {
   const WaterBillPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final dark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("List of services"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), color: dark ? TColors.light : Colors.black
         ),
       ),
       body: Padding(
@@ -202,11 +205,14 @@ class WaterBillPage extends StatelessWidget {
                               height: 100,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            "Camwater Bills/Factures",
-                            style: TextStyle(fontSize: 12, ),
-                          ),
+
+                          Flexible(
+                            child: Text(
+                              "Camwater Bills",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w500),
+                            ),
+                          )
                         ],
                       ),
                     ),

@@ -29,13 +29,13 @@ class LoginFormEmailNumber extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
-                const SizedBox(width: 10),
+
                 ChoiceChip(
                   label: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.phone, color: Colors.white), // Phone icon
-                      const SizedBox(width: 5), // Space between icon and text
+                      const SizedBox(width: 2), // Space between icon and text
                       const Text(
                         'Phone Number',
                         style: TextStyle(color: Colors.white),
@@ -50,13 +50,13 @@ class LoginFormEmailNumber extends StatelessWidget {
                   backgroundColor: Colors.grey,
                 ),
 
-                SizedBox(width: 20),
+                SizedBox(width: 5),
                 ChoiceChip(
                   label: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.email, color: Colors.white), // Email icon
-                      const SizedBox(width: 5), // Space between icon and text
+                      const SizedBox(width: 2), // Space between icon and text
                       const Text(
                         'Email',
                         style: TextStyle(color: Colors.white),
@@ -75,23 +75,24 @@ class LoginFormEmailNumber extends StatelessWidget {
 
               ],
             )),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             Obx(() => SizedBox(
               width: 400,
               child: isEmailSelected.value
-                  ? TextField(
-                textAlign: TextAlign.left,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Enter your Email',
-                  border: const OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email, color: TColors.primary),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.send_rounded, color: TColors.primary),
-                    onPressed: () => Get.to(() =>  LoginPasswordScreen()),
-                  ),
-                ),
-              )
+                  ?TextField(
+    textAlign: TextAlign.left,
+    keyboardType: TextInputType.emailAddress,
+    decoration: InputDecoration(
+    labelText: 'Enter your Email',
+    border: const OutlineInputBorder(),
+    prefixIcon: Icon(Icons.email, color: TColors.primary),
+    suffixIcon: IconButton(
+    icon: const Icon(Icons.send_rounded, color: TColors.primary),
+    onPressed: () => Get.to(() => LoginPasswordScreen()),
+    ),
+    ),
+    )
+         
                   : CountryCodeTextField(
                 keyboardType: TextInputType.number,
 
@@ -166,7 +167,7 @@ class LoginFormEmailNumber extends StatelessWidget {
              // child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(), child: Text(TTexts.signIn.tr)),
            // ),
            // const SizedBox(height: TSizes.spaceBtwItems),
-            const SizedBox(height: 20),
+
             /// Create Account Button
             //SizedBox(
             //  width: double.infinity,

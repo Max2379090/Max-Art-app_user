@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../common/widgets/loaders/animation_loader.dart';
+import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../controllers/product/cart_controller.dart';
@@ -19,7 +20,21 @@ class CartScreen extends StatelessWidget {
     final cartItems = controller.cartItems;
     return Scaffold(
       /// -- AppBar
-      appBar: TAppBar(showBackArrow: true, title: Text('Cart'.tr, style: Theme.of(context).textTheme.headlineSmall)),
+      appBar:
+
+      AppBar(
+        backgroundColor: TColors.primary,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          "Cart".tr,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
       body: Obx(() {
         /// Nothing Found Widget
         final emptyWidget = TAnimationLoaderWidget(

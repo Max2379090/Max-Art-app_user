@@ -6,6 +6,7 @@ import '../../../../../home_menu.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/text_strings.dart';
+import '../../../../../utils/helpers/helper_functions.dart';
 import '../../../../../utils/validators/validation.dart';
 import '../../../controllers/login_in_controller.dart';
 import '../../password_configuration/forget_password.dart';
@@ -17,6 +18,7 @@ class LoginFormPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
     final controller = Get.put(LoginController());
     return Form(
       key: controller.loginFormKey2,
@@ -95,11 +97,11 @@ class LoginFormPassword extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.fingerprint, color: TColors.primary),
+                    Icon(Icons.fingerprint, color:dark ? TColors.white : TColors.primary),
                     SizedBox(width: 8),
                     Text(
                       TTexts.fingerprint.tr,
-                      style: TextStyle(color: TColors.primary),
+                      style: TextStyle(color:dark ? TColors.white : TColors.primary),
                     ),
                   ],
                 ),

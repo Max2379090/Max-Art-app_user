@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../common/widgets/list_tiles/setting_notification.dart';
 import '../../../../common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ import '../../../shop/screens/coupon/coupon.dart';
 import '../../../shop/screens/notification/notification.dart';
 import '../../../shop/screens/order/order.dart';
 import '../../../shop/screens/payment_detail/payment_liste.dart';
+import '../../../shop/screens/wallet/wallet_page.dart';
 import '../../controllers/user_controller.dart';
 import '../address/address.dart';
 import '../profile/profile.dart';
@@ -68,7 +71,75 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     TUserProfileTile(onPressed: () => Get.to(() => const ProfileScreen())),
-                    const SizedBox(height: TSizes.spaceBtwSections),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 80,
+                      width: 460,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white24, // Background color
+
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Account Balance',
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: TColors.white),
+                                  ),
+                                  StreamBuilder<DocumentSnapshot>(
+                                    stream: FirebaseFirestore.instance.collection('Users').doc('Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2').snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                        return CircularProgressIndicator(color: Colors.white);
+                                      }
+                                      if (!snapshot.hasData || !snapshot.data!.exists) {
+                                        return Text(
+                                          "0 F CFA",
+                                          style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600, color: Colors.white),
+                                        );
+                                      }
+
+                                      var data = snapshot.data!;
+                                      double balance = (data['balance'] is String)
+                                          ? double.tryParse(data['balance']) ?? 0.0
+                                          : (data['balance'] as num).toDouble();
+
+                                      return Text(
+                                        "${balance.toStringAsFixed(0)} F CFA",
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+                                      );
+                                    },
+                                  ),
+
+
+
+                                ],
+                              ),
+                            ],
+                          ),
+
+                          Container(
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2), // Light background for the icon
+                              shape: BoxShape.circle,
+                            ),
+                            child:IconButton(onPressed: () => Get.to(() =>TopUpScreen())
+
+                            ,icon: Icon(Iconsax.add, color: Colors.white, size: 30),
+                          ),
+                          )],
+                      ),
+                    ),
+                    const SizedBox(height:50),
+
+
                   ],
                 ),
               ),
@@ -101,7 +172,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Iconsax.wallet,
                       title: 'My History payment'.tr,
                       subTitle: 'Order Payment History'.tr,
-                      onTap: () => Get.to(() => const PaymentListScreen()),
+                      onTap: () => Get.to(() =>  HistoryPage(userId: 'Mk2sY0Tbw5Uo3PHEyPU4AMfEMHt2',)),
                     ),
                     TSettingsMenuTile(
                       icon: Iconsax.discount_shape,
@@ -161,22 +232,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _buildLanguageDialog(BuildContext context) {
+    final dark = THelperFunctions.isDarkMode(context);
     final List<Map<String, dynamic>> locales = [
-      {'name': 'English', 'locale': const Locale('en', 'US')},
-      {'name': 'Français', 'locale': const Locale('fr', 'FR')},
+      {'name': 'English', 'locale': const Locale('en', 'US'), 'flag': 'assets/flags/us.png'},
+      {'name': 'Français', 'locale': const Locale('fr', 'FR'), 'flag': 'assets/flags/fr.png'},
     ];
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor:dark ? TColors.black : TColors.light,
       builder: (builder) {
         return FractionallySizedBox(
           heightFactor: 0.5,
           child: Container(
-            padding: const EdgeInsets.all(TSizes.lg),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: locales.map((locale) => ListTile(
+                leading: Image.asset(locale['flag'], width: 30, height: 30),
                 title: Text(locale['name']),
                 onTap: () {
                   Get.updateLocale(locale['locale']);
@@ -189,4 +262,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
     );
   }
+
+
 }

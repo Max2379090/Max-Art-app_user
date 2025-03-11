@@ -162,17 +162,19 @@ class _NotificationState extends State<Notifications> {
     final isDark = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar:
+      AppBar(
+        backgroundColor: TColors.primary,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: isDark ? TColors.light : TColors.black),
-          onPressed: () => Get.back(),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: Text(
-          'Notifications'.tr,
-          style: TextStyle(color: isDark ? TColors.light : TColors.black),
+          "Notifications".tr,
+          style: TextStyle(fontSize: 20, color: Colors.white),
         ),
-        centerTitle: true,
-        backgroundColor: isDark ? TColors.black : TColors.light,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore

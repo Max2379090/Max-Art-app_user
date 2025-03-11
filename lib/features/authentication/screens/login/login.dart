@@ -16,7 +16,7 @@ class LoginScreen extends StatelessWidget {
         child: Padding(
           padding: TSpacingStyle.paddingWithAppBarHeight,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ///  Header
@@ -32,7 +32,7 @@ class LoginScreen extends StatelessWidget {
 
               /// Footer
               //const TSocialButtons(),
-              const SizedBox(height: 190),
+              //const SizedBox(height: 190),
             ],
           ),
         ),
