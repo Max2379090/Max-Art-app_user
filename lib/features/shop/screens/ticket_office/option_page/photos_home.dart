@@ -3,10 +3,7 @@ import 'package:Max_store/features/shop/screens/ticket_office/option_page/photog
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart'; // Make sure you import Getx if using Obx
-import '../../../../../common/widgets/custom_shapes/containers/circular_container.dart';
 import '../../../../../utils/constants/colors.dart';
-import '../../../../../utils/constants/sizes.dart';
-import '../../home/widgets/promo_slider2.dart';
 
 class Photos extends StatelessWidget {
   const Photos({super.key});

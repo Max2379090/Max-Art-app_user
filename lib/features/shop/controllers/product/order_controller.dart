@@ -14,7 +14,6 @@ import '../../../../data/repositories/order/order_repository.dart';
 import '../../../../home_menu.dart';
 import '../../../../utils/constants/enums.dart';
 import '../../../../utils/constants/image_strings.dart';
-import '../../../../utils/popups/full_screen_loader.dart';
 import '../../../../utils/popups/loaders.dart';
 import '../../../personalization/controllers/address_controller.dart';
 import '../../models/order_model.dart';

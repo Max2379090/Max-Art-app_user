@@ -67,7 +67,7 @@ class YoomeePage extends StatelessWidget {
                     ),
                     subtitle: Text(item['price']!),
                     trailing: Text(
-                      item['price']!.split(' ')[0] + ' F',
+                      '${item['price']!.split(' ')[0]} F',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,

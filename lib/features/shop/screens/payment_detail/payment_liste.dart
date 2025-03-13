@@ -7,7 +7,6 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../contact_us/contact_us.dart';
-import '../contact_us/message page/MessagePage_send.dart';
 // Import the detail page
 
 class HistoryPage extends StatelessWidget {

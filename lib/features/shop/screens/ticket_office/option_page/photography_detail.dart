@@ -109,6 +109,7 @@ class _PhotographyPageState extends State<PhotographyPage> {
      // message: 'Your payment has been processed successfully.'.tr,
    // );
   }
+  @override
   void initState() {
     super.initState();
     filteredSubscriptions = subscriptions;

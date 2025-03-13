@@ -267,7 +267,7 @@ class PaymentOption extends StatelessWidget {
   final String icon;
   final String label;
 
-  const PaymentOption({required this.icon, required this.label});
+  const PaymentOption({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/helpers/helper_functions.dart';
-import '../creat_compte_with_email.dart';
 import '../signup_email.dart';
 
 class OtpScreen extends StatefulWidget {

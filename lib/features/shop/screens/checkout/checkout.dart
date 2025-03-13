@@ -16,7 +16,6 @@ import '../../../personalization/controllers/address_controller.dart';
 import '../../controllers/product/cart_controller.dart';
 import '../../controllers/product/checkout_controller.dart';
 import '../../controllers/product/order_controller.dart';
-import '../../models/data_model.dart';
 import '../../models/payment_method_model.dart';
 import '../cart/widgets/cart_items.dart';
 import 'widgets/billing_address_section.dart';
